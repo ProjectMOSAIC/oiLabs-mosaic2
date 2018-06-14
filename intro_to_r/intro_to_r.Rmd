@@ -43,20 +43,20 @@ R has a number of additional packages that help you perform specific tasks.
 In order to use these packages, they must be installed (you only have to do this 
 once) and loaded (you have to do this every time you start an R session). 
 
-```{r opts, eval=TRUE, echo=FALSE}
+```{r opts, eval = TRUE, echo = FALSE}
 library(knitr)
-opts_chunk$set(eval=FALSE)
+opts_chunk$set(eval = FALSE)
 ```
 
 If you have not installed the packages already, run the commands below. It may take a few minutes; you'll know when the packages have finished installing when you see the R prompt return in your console.
-```{r load-devtools-oilabs, message = FALSE, eval=FALSE}
+```{r load-devtools-oilabs, message = FALSE, eval = FALSE}
 install.packages(c("dplyr", "ggplot2", "devtools"))
 devtools::install_github("andrewpbray/oilabs")
 ```
 
 Then, we can load the packages
-```{r load-packages, eval=TRUE, message = FALSE}
-library(oilabs)
+```{r load-packages, eval = TRUE, message = FALSE}
+#library(oilabs)
 library(dplyr)
 library(ggplot2)
 ```
@@ -66,7 +66,7 @@ library(ggplot2)
 
 The data for this lab are Arbuthnot baptism counts for boys and girls, which we load into R as follows:
 
-```{r load-abrbuthnot-data, eval=TRUE, message = FALSE}
+```{r load-abrbuthnot-data, eval = TRUE, message = FALSE}
 data(arbuthnot)
 ```
 
@@ -102,17 +102,31 @@ think of them as the index that you see on the left side of a spreadsheet. In
 fact, the comparison to a spreadsheet will generally be helpful. R has stored 
 Arbuthnot's data in a kind of spreadsheet or table called a *data frame*.
 
-You can see the dimensions of this data frame by typing:
+You can confirm this by typing: 
 
-```{r dim-data, eval=TRUE}
+```{r class-data, eval = TRUE}
+class(arbuthnot)
+```
+
+Now that you know that you have tabular data at hand, 
+a useful next step is to get a big picture of the contents of the data. 
+
+Find the dimensions of this data frame by typing:
+
+```{r dim-data, eval = TRUE}
 dim(arbuthnot)
 ```
 
 This command should output `[1] 82 3`, indicating that there are 82 rows and 3 
-columns, just as it says next to the object in your environment. You can see 
-the names of these columns (or variables) by typing:
+columns, just as it says next to the object in your environment. 
+This is a reasonably-sized data, so we did not run into any problems 
+typing its name into the console earlier to view the entire set.
+Checking to make sure that the dimensions of your data are not too large, 
+you can avoid trying to project all of the values. 
 
-```{r names-data, eval=TRUE}
+Find the names of these columns (or variables) by typing:
+
+```{r names-data, eval = TRUE}
 names(arbuthnot)
 ```
 
@@ -121,6 +135,14 @@ You should see that the data frame contains the columns `year`,  `boys`, and
 lot like functions from math class; that is, invoking R commands means supplying
 a function with some number of arguments. The `dim` and `names` commands, for 
 example, each took a single argument, the name of a data frame. 
+
+A concise way to get the above information is to type:
+```{r structure-data, eval = TRUE}
+str(arbuthnot)
+```
+
+The `str` command outputs the structure of the data, which includes the dataset's class, dimensions,
+and variable names.
 
 One advantage of RStudio is that it comes with a built-in data viewer. Click on
 the name `arbuthnot` in the *Environment* pane (upper right window) that lists 
