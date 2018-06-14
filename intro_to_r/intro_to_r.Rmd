@@ -171,17 +171,23 @@ then select the `boys` variable.'
 1.  What command would you use to extract just the counts of girls baptized? Try
     it!
 
-There is an additional package for R called `mosaic` that streamlines all of the commands that you will need in this course. This package is specifically designed by a team of NSF-funded educators to make R more accessible to introductory statistics students like you. The [`mosaic` package](https://cran.r-project.org/web/packages/mosaic/index.html) doesn't provide new functionality so much as it makes existing functionality more logical, consistent, all the while emphasizing importants concepts in statistics. 
+There is an additional package for R called `mosaic` that streamlines all of the commands 
+that you will need in this course. This package is specifically designed by a team of 
+NSF-funded educators to make R more accessible to introductory statistics students like you. 
+The [`mosaic` package](https://cran.r-project.org/web/packages/mosaic/index.html) doesn't 
+provide new functionality so much as it makes existing functionality more logical, 
+consistent, all the while emphasizing importants concepts in statistics. 
 
 To use the package, you will first need to install it.
 
-```{r install-mosaic, eval=FALSE}
+```{r install-mosaic, eval = FALSE}
 install.packages("mosaic")
 ```
 
-Note that you will only have to do this *once*. However, once the package is installed, you will have to load it into the current workspace before it can be used. 
+Note that you will only have to do this *once*. However, once the package is installed, 
+you will have to load it into the current workspace before it can be used. 
 
-```{r require-mosaic, message=FALSE}
+```{r require-mosaic, message = FALSE}
 library(mosaic)
 ```
 
@@ -191,28 +197,39 @@ R has some powerful functions for making graphics.
 
 The centerpiece of the `mosaic` syntax is the use of the *modeling language*. This involves the use of a tilde (~), which can be read as "is a function of".
 
-We can create a simple plot of the number of girls baptized per year with the command
+We can create a simple plot of the number of girls baptized per year with the command:
 
-```{r plot-girls-vs-year, eval=FALSE, message=FALSE}
-xyplot(girls ~ year, data=arbuthnot)
+```{r plot-girls-vs-year, eval = FALSE, message = FALSE}
+gf_point(girls ~ year, data = arbuthnot)
 ```
 
-By default, R creates a scatterplot with each x,y pair indicated by an open circle. The plot itself should appear under the *Plots* tab of the lower right panel of RStudio. Notice that the command above is a function called `xyplot` that takes two arguments separated by a comma.  The first argument to the `xyplot` function is a formula of the form `y ~ x` that specifies which variable should go on the vertical (`y`) axis and which should go on the horizontal (`x`) axis. The `data` argument tell R where to find the `girls` and `year` variables -- in this case, they are inside the data frame called `arbuthnot`. You will find that you can perform most of the operations that you will see in this class using this simple template. [Please see the [Less Volume, More Creativity](https://cran.r-project.org/web/packages/mosaic/vignettes/LessVolume-MoreCreativity.html) vignette for more information about this.]
+By default, R creates a scatterplot with each x, y pair indicated by a filled circle. The plot itself should appear under the *Plots* tab of the lower right panel of RStudio. Notice that the command above is a function called `gf_point` that takes two arguments separated by a comma.  The first argument to the `gf_point` function is a formula of the form `y ~ x` that specifies which variable should go on the vertical (`y`) axis and which should go on the horizontal (`x`) axis. The `data` argument tell R where to find the `girls` and `year` variables -- in this case, they are inside the data frame called `arbuthnot`. You will find that you can perform most of the operations that you will see in this class using this simple template. [Please see the [Less Volume, More Creativity](https://cran.r-project.org/web/packages/mosaic/vignettes/LessVolume-MoreCreativity.html) vignette for more information about this.]
 
-If we wish to plot `l`ines instead of `p`oints, we can add the `type` argument. Note below that the `type` argument is the letter `l` and not the number `1`.  
+If we wish to plot `line`s instead of `point`s, we can change the `plottype` in the {ggformula} function that you type.
+`plottype` describes the type of plot desired (points, lines, a histogram, etc.)
+ 
 
-```{r plot-girls-vs-year-line, eval=FALSE}
-xyplot(girls ~ year, data=arbuthnot, type = "l")
+```{r plot-girls-vs-year-line, eval = FALSE}
+gf_line(girls ~ year, data = arbuthnot)
 ```
 
-You might wonder how you are supposed to know that it was possible to add that 
-third argument.  Thankfully, R documents all of its functions extensively. To 
-read what a function does and learn the arguments that are available to you, 
-just type in a question mark followed by the name of the function that you're 
-interested in. Try the following.
+You might wonder how you are supposed to know that it was possible to change the plot to 
+represent the x, y pairs as lines, rather than circles. Thankfully,  
 
-```{r plot-help, eval=FALSE, tidy = FALSE}
-?xyplot
+When you type the following code: 
+```{r list-package-functions, eval = FALSE}
+ls("package:ggformula")
+```
+You will get a list (what `ls` stands for) of the included functions in the package.
+
+Once you have found the desired function, you may enlist R's help to feed the necessary arguments. 
+Since R extensively documents all of its functions, to read what a function does and 
+learn the arguments that are available to you, just type in a question mark followed by the
+name of the function that you're interested in. 
+Try the following.
+
+```{r plot-help, eval = FALSE, tidy = FALSE}
+?gf_line
 ```
 
 Notice that the help file replaces the plot in the lower right panel. You can 
@@ -265,7 +282,7 @@ that data set with the new mutated column.
 We can make a plot of the total number of baptisms per year with the command
 
 ```{r plot-total-vs-year}
-xyplot(boys + girls ~ year, data=arbuthnot, type = "l")
+gf_line(total ~ year, data = arbuthnot)
 ```
 
 Similarly to how we computed the total number of births, we can compute the ratio 
@@ -341,7 +358,7 @@ analysis of Arbuthnot's baptism data. Your assignment involves repeating these
 steps, but for present day birth records in the United States.  Load up the 
 present day data with the following command.
 
-```{r load-present-data, eval=FALSE}
+```{r load-present-data, eval = FALSE}
 data(present)
 ```
 
