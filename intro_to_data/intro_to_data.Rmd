@@ -186,7 +186,9 @@ we would enter the following command:
 
 ```{r mosaic-smoke-gender, eval=FALSE}
 tally(gender ~ smoke100, data = cdc) %>% 
-  mosaicplot()
+  vcd::mosaic(shade = TRUE, legend = F)
+#XX NH 
+# Colors are misleading; do we want this? 
 ```
 
 
