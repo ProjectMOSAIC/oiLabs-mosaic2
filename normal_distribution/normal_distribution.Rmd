@@ -14,7 +14,7 @@ knitr::opts_chunk$set(eval = FALSE)
 In this lab we'll investigate the probability distribution that is most central
 to statistics: the normal distribution.  If we are confident that our data are 
 nearly normal, that opens the door to many powerful statistical methods.  Here 
-we'll use the graphical tools of R to assess the normality of our data and also 
+we'll use the graphical tools of R to assess the normality of our data and  
 learn how to generate random numbers from a normal distribution.
 
 ## The Data
@@ -38,7 +38,7 @@ bringing up the help page.
 ```
 
 We'll be focusing on just three columns to get started: weight in kg (`wgt`), 
-height in cm (`hgt`), and `sex` (`m` indicates male, `f` indicates female).
+height in cm (`hgt`), and `sex` (`1` indicates male, `0` indicates female).
 
 Since males and females tend to have different body dimensions, it will be 
 useful to create two additional data sets: one with only men and another with 
@@ -46,9 +46,9 @@ only women.
 
 ```{r male-female, eval=TRUE}
 mdims <- bdims %>%
-  filter(sex == "m")
+  filter(sex == "1")
 fdims <- bdims %>%
-  filter(sex == "f")
+  filter(sex == "0")
 ```
 
 1.  Make a plot (or plots) to compare the distributions of men's and women's heights.  How 
@@ -68,26 +68,32 @@ and then calculate some statistics that will be referenced later.
 
 
 ```{r female-hgt-mean-sd, eval=TRUE}
-meanFheight <- mean(~hgt, data = fdims)
-sdFheight <- sd(~hgt, data = fdims)
+meanFheight <- mean(~ hgt, data = fdims)
+sdFheight <- sd(~ hgt, data = fdims)
 ```
 
-Next we want to make a density histogram to use as the backdrop and use the `fit` argument to overlay a normal probability curve. The `histogram()` command has a parameter called `type` that allows us to specify if we want to see `count`, `percent` or `density` in our histogram. Setting `type="count"` produces a frequency histogram, which shows the number of data points that fall into a particular bin. In a frequency histogram, the *heights* of the bars add up to the total number of observations. 
+Next we want to make a density histogram to use as the backdrop and use the `fit` argument to overlay a normal probability curve. 
+XX edit this for ggformula 
+The `gf_hist()` command has a parameter called `type` that allows us to specify if we want to see `count`, `percent` or `density` in our histogram. Setting `type="count"` produces a frequency histogram, which shows the number of data points that fall into a particular bin. In a frequency histogram, the *heights* of the bars add up to the total number of observations. 
 
 ```{r mosaic-hist1}
-histogram(~hgt, data = fdims, type="count")
+histogram(~ hgt, data = fdims, type = "count")
+gf_histogram( ~ hgt, data = fdims)
 ```
 
 Setting `type="percent"` changes the labels to percentages of the data that fall into each bin. Now, the *heights* of the bars all add up to 1. 
 
+XX NH ggformula doesn't seem to have this option; should we consider adding this function to the ggformula package? 
+
 ```{r mosaic-hist2}
-histogram(~hgt, data = fdims, type="percent")
+histogram(~ hgt, data = fdims, type = "percent")
+gf_percents( ~ hgt, data = fdims)
 ```
 
 Finally, `type="density"` creates a density histogram. In a density histogram the *areas* of the bars add up to 1. The area of each bar can be calculated as simply the height *times* the width of the bar.
 
 ```{r mosaic-hist3}
-histogram(~hgt, data = fdims, type = "density")
+gf_dhistogram( ~ hgt, data = fdims)
 ```
 
 Frequency, percent, and density histograms all display the same shape; they only differ in their $y$-axis. You can verify this by comparing the three histograms we just constructed.
@@ -266,5 +272,5 @@ theoretical probabilities will be.
 This is a product of OpenIntro that is released under a 
 [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
 This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel
-from a lab written by Mark Hansen of UCLA Statistics.
+from a lab written by Mark Hansen of UCLA Statistics. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
