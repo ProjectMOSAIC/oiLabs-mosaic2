@@ -71,8 +71,10 @@ used to calculate the lengths of all shooting streaks and then look at the
 distribution.
 
 ```{r calc-streak-kobe}
-kobe_streak <- calc_streak(kobe$basket)
-barchart(tally(~kobe_streak), horizontal=FALSE)
+kobe_streak <- kobe %>% 
+  pull(basket) %>% 
+  calc_streak()
+gf_bar(~ kobe_streak) 
 ```
 
 Note that instead of making a histogram, we chose to make a bar plot from a 
@@ -160,7 +162,7 @@ To view the results of this simulation, type the name of the object and then use
 
 ```{r table-sim-fair-coin}
 sim_fair_coin
-tally(~sim_fair_coin)
+tally(~ sim_fair_coin)
 ```
 
 Since there are only two elements in `outcomes`, the probability that we "flip" 
@@ -263,5 +265,5 @@ Using `calc_streak`, compute the streak lengths of `sim_basket`.
 This is a product of OpenIntro that is released under a 
 [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
 This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel
-from a lab written by Mark Hansen of UCLA Statistics.
+from a lab written by Mark Hansen of UCLA Statistics. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
