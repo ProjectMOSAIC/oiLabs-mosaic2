@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 library(dplyr)
 library(ggplot2)
 library(mosaic)
@@ -28,9 +28,9 @@ office. Our particular focus for this lab will be all residential home sales
 in Ames between 2006 and 2010.  This collection represents our population of 
 interest. In this lab we would like to learn about these home sales by taking 
 smaller samples from the full population. Let's first load some packages that
-we will use in this lab
+we will use in this lab:
 
-```{r load-packages}
+```{r load-packages, eval=TRUE}
 library(dplyr)
 library(ggplot2)
 library(mosaic)
@@ -40,18 +40,8 @@ library(oilabs)
 and then load the data from the `oilabs` package.
 
 ```{r load-data}
-<<<<<<< HEAD
-library(mosaic)
-library(oilabs)
 data(ames)
 head(ames)
-# rename two variables to make life easier
-ames <- ames %>%
-  rename(area = Gr.Liv.Area) %>%
-  rename(price = SalePrice)
-=======
-data(ames.RData)
->>>>>>> mydplyr/master
 ```
 
 We see that there are quite a few variables in the data set, enough to do a 
@@ -64,7 +54,7 @@ sales visually and with summary statistics. Let's first create a visualization,
 a histogram:
 
 ```{r area-hist}
-histogram(~area, data = ames)
+gf_dhistogram(~ area, data = ames, bins = 13)
 ```
 
 Let's also obtain some summary statistics. Note that we can do this using the
@@ -73,7 +63,7 @@ distribution, as we can use them for descriptions like *"the middle 50% of the
 homes have areas between such and such square feet"*.
 
 ```{r area, eval=FALSE}
-favstats(~area, data = ames)
+favstats(~ area, data = ames)
 ```
 
 1.  Describe this population distribution using the visualization and the summary
@@ -116,7 +106,7 @@ If we're interested in estimating the average living area in homes in Ames
 using the sample, our best single guess is the sample mean.
 
 ```{r mean-samp1}
-mean(~area, data = samp1)
+mean(~ area, data = samp1)
 ```
 
 Depending on which 50 homes you selected, your estimate could be a bit above 
@@ -141,8 +131,8 @@ sample mean of each. Note that we since we are sampling with replacement, we
 use the `resample` function instead of `sample_n`. 
 
 ```{r loop}
-sample_means50 <- do(2000) * mean(~area, data = resample(ames, 50))
-histogram(~mean, data = sample_means50)
+sample_means50 <- do(2000) * mean(~ area, data = resample(ames, 50))
+gf_histogram(~ mean, data = sample_means50, bins = 12)
 ```
 
 Here we use R to take 2000 samples of size 50 from the population, calculate 
@@ -169,12 +159,12 @@ to compute each of the 2000 sample means one line at a time, putting them
 individually into the slots of the `sample_means50` vector:
 
 ```{r do-long}
-sample_means50 <- rep(NA, 2000)
+sample_means50 <- rep(NA, 2000) #create empty vector
 
-sample_means50[1] <- mean(~area, data = resample(ames, 50))
-sample_means50[2] <- mean(~area, data = resample(ames, 50))
-sample_means50[3] <- mean(~area, data = resample(ames, 50))
-sample_means50[4] <- mean(~area, data = resample(ames, 50))
+sample_means50[1] <- mean(~ area, data = resample(ames, 50))
+sample_means50[2] <- mean(~ area, data = resample(ames, 50))
+sample_means50[3] <- mean(~ area, data = resample(ames, 50))
+sample_means50[4] <- mean(~ area, data = resample(ames, 50))
 # ...and so on, 2000 times
 ```
 
@@ -182,7 +172,7 @@ With the `do` function, these thousands of lines of code are compressed
 into one line:
 
 ```{r do-again}
-sample_means50 <- do(2000) * mean(~area, data = resample(ames, 50))
+sample_means50 <- do(2000) * mean(~ area, data = resample(ames, 50))
 ```
 
 Note that for each of the 2,000 times we computed a mean, we did so from a 
@@ -200,7 +190,7 @@ Mechanics aside, let's return to the reason we used the `do` function: to comput
 sampling distribution, specifically, this one.
 
 ```{r hist, eval=FALSE}
-histogram(~mean, data = sample_means50)
+histogram(~ mean, data = sample_means50)
 ```
 
 The sampling distribution that we computed tells us much about estimating 
@@ -216,9 +206,9 @@ sample size has on our sampling distribution
 with sample means coming from samples of size $n = 10$, $n = 50$, and $n = 100$.
 
 ```{r samp-10-100}
-sample_means10 <- do(2000) * mean(~area, data = resample(ames, 10))
-sample_means50 <- do(2000) * mean(~area, data = resample(ames, 50))
-sample_means100 <- do(2000) * mean(~area, data = resample(ames, 100))
+sample_means10 <- do(2000) * mean(~ area, data = resample(ames, 10))
+sample_means50 <- do(2000) * mean(~ area, data = resample(ames, 50))
+sample_means100 <- do(2000) * mean(~ area, data = resample(ames, 100))
 ```
 
 **Step 2:** Plot these three sampling distributions on top of each other on the
@@ -256,8 +246,8 @@ in either case, we identify the distributions with the `sample_size` variable we
 created earlier.
 
 ```{r eval=FALSE}
-densityplot(~mean, groups = sample_size, data = sampling_dist)
-histogram(~mean | sample_size, data = sampling_dist, layout=c(1,3))
+gf_dens(~ mean, data = sampling_dist, color = ~ sample_size)
+gf_dhistogram(~ mean | sample_size, data = sampling_dist, bins = 15)
 ```
 
 1.  When the sample size is larger, what happens to the center?  What about the 
@@ -296,5 +286,5 @@ Ames. Now you'll try to estimate the mean home price.
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
 Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel.
+This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>

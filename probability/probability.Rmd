@@ -36,9 +36,10 @@ library(knitr)
 opts_chunk$set(eval=FALSE)
 ```
 
-```{r load-data, message=FALSE}
+```{r load-data, message=TRUE, eval=TRUE}
 library(mosaic)
 library(oilabs)
+library(openintro)
 data(kobe)
 head(kobe)
 ```
