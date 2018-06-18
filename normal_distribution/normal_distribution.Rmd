@@ -26,6 +26,7 @@ healthy young adults. Let's take a quick peek at the first few rows of the data.
 ```{r load-data, message=FALSE, warning=FALSE, results='hide', eval=TRUE}
 library(mosaic)
 library(oilabs)
+data(bdims)
 head(bdims)
 ```
 
@@ -72,39 +73,28 @@ meanFheight <- mean(~ hgt, data = fdims)
 sdFheight <- sd(~ hgt, data = fdims)
 ```
 
-Next we want to make a density histogram to use as the backdrop and use the `fit` argument to overlay a normal probability curve. 
-XX edit this for ggformula 
-The `gf_hist()` command has a parameter called `type` that allows us to specify if we want to see `count`, `percent` or `density` in our histogram. Setting `type="count"` produces a frequency histogram, which shows the number of data points that fall into a particular bin. In a frequency histogram, the *heights* of the bars add up to the total number of observations. 
+Writing `gf_histogram` produces a frequency histogram, which shows the number of data points that fall into a particular bin. In a frequency histogram, the *heights* of the bars add up to the total number of observations. 
 
 ```{r mosaic-hist1}
-histogram(~ hgt, data = fdims, type = "count")
-gf_histogram( ~ hgt, data = fdims)
+gf_histogram(~ hgt, data = fdims, bins = 15, xlab = "height")
 ```
 
-Setting `type="percent"` changes the labels to percentages of the data that fall into each bin. Now, the *heights* of the bars all add up to 1. 
-
-XX NH ggformula doesn't seem to have this option; should we consider adding this function to the ggformula package? 
-
-```{r mosaic-hist2}
-histogram(~ hgt, data = fdims, type = "percent")
-gf_percents( ~ hgt, data = fdims)
-```
-
-Finally, `type="density"` creates a density histogram. In a density histogram the *areas* of the bars add up to 1. The area of each bar can be calculated as simply the height *times* the width of the bar.
+In a density histogram the *areas* of the bars add up to 1. The area of each bar can be calculated as simply the height *times* the width of the bar.
 
 ```{r mosaic-hist3}
-gf_dhistogram( ~ hgt, data = fdims)
+gf_dhistogram(~ hgt, data = fdims, bins = 15, xlab = "height")
 ```
 
-Frequency, percent, and density histograms all display the same shape; they only differ in their $y$-axis. You can verify this by comparing the three histograms we just constructed.
+Frequency and density histograms all display the same shape; they only differ in their $y$-axis. You can verify this by comparing the three histograms we just constructed.
 
-Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function. R is helpful and won't allow you to run this command with any type other than `density`. 
+Next we want to make a density histogram to use as the backdrop and overlay a normal probability curve. The function `gf_dhistogram()` creates a density histogram, and piping it into the `gf_fitdistr` function will accomplish the second task. Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function. 
+
 ````{r hist-height, message=FALSE}
-histogram(~hgt, data = fdims, fit = "normal", nint = 8, type = "density")
+gf_dhistogram(~ hgt, data = fdims, bins = 15, xlab = "height") %>%
+  gf_fitdistr(dist = dnorm)
 ```
 
-Notice that adding the `fit` argument to `histogram` overlays a normal distribution on plot. The optional `nint` argument simply specificies the number of bins.
-
+The optional `bins` argument simply specificies the number of bins.
 
 2.  Based on the this plot, does it appear that the data follow a nearly normal 
     distribution?
@@ -119,10 +109,9 @@ constructing a normal probability plot, also called a normal Q-Q plot for
 "quantile-quantile".
 
 ````{r qq}
-qqmath(~hgt, data = fdims, type = c("p", "r"))
+gf_qq(~ hgt, data = fdims) %>% 
+  gf_qqline()
 ```
-
-In this command, the `p` signifies points and the `r` says to add a regression line. 
 
 A data set that is nearly normal will result in a probability plot where the 
 points closely follow a line.  Any deviations from normality leads to 
@@ -132,7 +121,7 @@ tails.  We're left with the same problem that we encountered with the histogram
 above: how close is close enough?
 
 The x-axis values correspond to the quantiles of a theoretically normal curve 
-with mean 0 and standard deviation 1 (a.k.a. the standard normal distribution).  The 
+with mean 0 and standard deviation 1 (a.k.a. the standard normal distribution). The 
 y-axis values correspond to the quantiles of the original unstandardized sample 
 data. However, even if we were to standardize the sample data values, the Q-Q
 plot would look identical. A data set that is nearly normal will result in a
