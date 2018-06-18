@@ -36,13 +36,6 @@ data(ames)
 head(ames)
 ```
 
-We can rename the `Gr.Liv.Area` variable in the same way we did in the last lab, for consistency.
-
-```{r rename}
-ames <- ames %>%
-  rename(area = Gr.Liv.Area)
-```
-
 In this lab we'll start with a simple random sample of size 60 from the 
 population. Note that 
 the data set has information on many housing variables, but for the first 
