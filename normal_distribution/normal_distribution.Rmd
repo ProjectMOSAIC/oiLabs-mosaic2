@@ -39,7 +39,7 @@ bringing up the help page.
 ```
 
 We'll be focusing on just three columns to get started: weight in kg (`wgt`), 
-height in cm (`hgt`), and `sex` (`1` indicates male, `0` indicates female).
+height in cm (`hgt`), and `sex` (`m` indicates male, `f` indicates female).
 
 Since males and females tend to have different body dimensions, it will be 
 useful to create two additional data sets: one with only men and another with 
@@ -47,9 +47,9 @@ only women.
 
 ```{r male-female, eval=TRUE}
 mdims <- bdims %>%
-  filter(sex == "1")
+  filter(sex == "m")
 fdims <- bdims %>%
-  filter(sex == "0")
+  filter(sex == "f")
 ```
 
 1.  Make a plot (or plots) to compare the distributions of men's and women's heights.  How 
