@@ -85,7 +85,7 @@ In a density histogram the *areas* of the bars add up to 1. The area of each bar
 gf_dhistogram(~ hgt, data = fdims, bins = 15, xlab = "height")
 ```
 
-Frequency and density histograms all display the same shape; they only differ in their $y$-axis. You can verify this by comparing the three histograms we just constructed.
+Frequency and density histograms all display the same shape; they only differ in their $y$-axis. You can verify this by comparing the two histograms we just constructed.
 
 Next we want to make a density histogram to use as the backdrop and overlay a normal probability curve. The function `gf_dhistogram()` creates a density histogram, and piping it into the `gf_fitdistr` function will accomplish the second task. Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function. 
 
