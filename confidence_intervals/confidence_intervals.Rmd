@@ -62,7 +62,7 @@ distribution is to use the mean. In this case we can calculate the mean of the
 sample using,
 
 ```{r sample-mean}
-sample_mean <- mean(~area, data = samp)
+sample_mean <- mean(~ area, data = samp)
 ```
 
 Return for a moment to the question that first motivated this lab: based on 
@@ -82,10 +82,12 @@ zstar <- qnorm(0.975) # why 0.975?
 zstar
 ```
 
-Now we can build the confidence interval. 
+zstar is actually the 97.5th percentile of the standard normal distribution.
+
+Now we can build the confidence interval:
 
 ```{r ci}
-se <- sd(~area, data = samp) / sqrt(60)
+se <- sd(~ area, data = samp) / sqrt(60)
 
 lower <- sample_mean - zstar * se
 
@@ -112,7 +114,7 @@ have data on the entire population. This value can be calculated using the
 following command:
 
 ```{r pop-mean}
-mean(~area, data = population)
+mean(~ area, data = population)
 ```
 
 5.  Does your confidence interval capture the true average size of houses in 
@@ -141,16 +143,16 @@ We can accomplish this using the `do` and `favstats` functions in `mosaic`. The 
 
 ```{r loop, tidy = FALSE}
 n <- 60
-samp_ci <- do(50) * favstats(~area, data = sample(population, size = n))
+samp_ci <- do(50) * favstats(~ area, data = sample(population, size = n))
 ```
 
 Lastly, we construct the confidence intervals.
 
 ```{r ci50}
 samp_ci <- samp_ci %>%
-  mutate( se = sd / sqrt(n)) %>%
-  mutate( lower = mean - zstar * se) %>%
-  mutate( upper = mean + zstar * se)
+  mutate(se = sd / sqrt(n)) %>%
+  mutate(lower = mean - zstar * se) %>%
+  mutate(upper = mean + zstar * se)
 ```
 
 Lower bounds of these 50 confidence intervals are stored in `lower`, and the 
@@ -162,10 +164,13 @@ samp_ci %>%
   slice(1)
 ```
 
+The `slice()` function selects rows by position.
+
 Now, we can plot how many of our confidence intervals intersect the true population mean using the `plot_ci` function.
 
 ```{r plot-ci}
-with(samp_ci, plot_ci(lower, upper, m = mean(~area, data = population)))
+with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = population)))
+#In addition, mosaic::CISim() has similar functionalities
 ```
 
 7. How many of your confidence intervals contained the true mean? Is this the number you expected to see?
@@ -179,7 +184,7 @@ So far, we have only focused on estimating the mean living area in homes in Ames
 - Create 50 random samples of size 60. Generate 95% confidence intervals for each of your samples, and plot the confidence intervals with the `plot_ci` function.  What proportion of your confidence intervals include the true population mean of `home price`? Is this proportion exactly equal to the confidence level? If not, explain why.
 
 ```{r plot-ci2, eval=FALSE}
-with(samp_ci, plot_ci(lower, upper, m = mean(~area, data = population)))
+with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = population)))
 ```
 
 - Pick a confidence level of your choosing, provided it is not 95% or 99%. What is the appropriate critical value?
@@ -190,5 +195,5 @@ with(samp_ci, plot_ci(lower, upper, m = mean(~area, data = population)))
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
 Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0).
-This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel.
+This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
