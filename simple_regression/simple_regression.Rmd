@@ -59,7 +59,7 @@ relationship with the correlation coefficient.
 
 ```{r cor, eval=FALSE, message=FALSE}
 require(mosaic)
-cor(runs ~ at_bats, data=mlb11)
+cor(runs ~ at_bats, data = mlb11)
 ```
 
 ## Sum of squared residuals
@@ -159,22 +159,13 @@ explained by at-bats.
 Let's create a scatterplot with the least squares line for `m1` laid on top.
 
 ```{r reg-with-line}
-<<<<<<< HEAD
-plotModel(m1)
+gf_point(runs ~ at_bats, data = mlb11) %>%
+   gf_lm() 
 ```
 
-The function `plotModel` plots the linear model in the "data space". Here, 
-the model `m1`, contains all the information needed to plot both the 
-original data and the line that represents the model fit to that data. 
-=======
-qplot(x = at_bats, y = runs, data = mlb11, geom = "point") +
-  stat_smooth(method = "lm", se = FALSE)
-```
-
-Here we are literally adding a layer on top of our plot. `stat_smooth` creates
-the line by fitting a linear model. It can also show us the standard error `se`
-associated with our line, but we'll suppress that for now.
->>>>>>> mydplyr/master
+Here we are literally adding a layer on top of our plot. `gf_lm()` creates
+the line by fitting a linear model. We can also use the `gf_smooth()` to show the standard error 
+associated with our line, but we won't use that for now.
 
 This line can be used to predict $y$ at any value of $x$. When 
 predictions are made for values of $x$ that are beyond the range of the observed
@@ -197,11 +188,9 @@ is linear using a scatterplot. We should also verify this condition with a plot
 of the residuals vs. at-bats.
 
 ```{r residuals}
-<<<<<<< HEAD
-xyplot(residuals(m1) ~ at_bats, data=mlb11, type=c("p", "r"), lty=3)
-=======
-qplot(x = .fitted, y = .stdresid, data = m1)
->>>>>>> mydplyr/master
+gf_point(.stdresid ~ .fitted, data = m1) %>%
+  gf_hline(yintercept = 0, linetype = "dashed")%>%
+  gf_labs(x = "Fitted Values", y = "Residuals") 
 ```
 
 Notice here that our model object `m1` can also serve as a data set because stored within it are the fitted values ($\hat{y}$) and the residuals.
@@ -211,21 +200,19 @@ Notice here that our model object `m1` can also serve as a data set because stor
 
 </br>
 
-**Nearly normal residuals**: To check this condition, we can look at a histogram
+**Nearly normal residuals**: To check this condition, we can look at a histogram with a Normal distribution
+curve overlay:
 
 ```{r hist-res}
-<<<<<<< HEAD
-histogram(~residuals(m1), fit="normal")
-=======
-qplot(x = .stdresid, data = m1, geom = "histogram")
->>>>>>> mydplyr/master
+gf_dhistogram(~ .stdresid, data = m1, bins = 6) %>% 
+  gf_fitdistr(dist = dnorm)
 ```
 
 or a normal probability plot of the residuals.
 
 ```{r qq-res}
-qplot(sample = .stdresid, data = m1, stat = "qq") +
-  geom_abline()
+gf_qq(~ .stdresid, data = m1) %>% 
+  gf_qqline()
 ```
 
 7.  Based on the histogram and the normal probability plot, does the nearly 
@@ -274,5 +261,5 @@ qplot(sample = .stdresid, data = m1, stat = "qq") +
 This is a product of OpenIntro that is released under a [Creative Commons 
 Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
 This lab was adapted for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel 
-from a lab written by the faculty and TAs of UCLA Statistics.
+from a lab written by the faculty and TAs of UCLA Statistics. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
