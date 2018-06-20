@@ -128,8 +128,7 @@ are evaluated more favorably. Let's create a scatterplot to see if this appears
 to be the case:
 
 ```{r scatter-score-bty_avg}
-require(mosaic)
-xyplot(score ~ bty_avg, data = evals)
+gf_point(score ~ bty_avg, data = evals)
 ```
 
 
@@ -162,7 +161,7 @@ take a look at the relationship between one of these scores and the average
 beauty score.
 
 ```{r bty-rel}
-xyplot(bty_avg ~ bty_f1lower, data = evals)
+gf_point(bty_avg ~ bty_f1lower, data = evals)
 cor(bty_avg ~ bty_f1lower, data = evals)
 ```
 
@@ -173,7 +172,7 @@ following command:
 
 ```{r bty-rels}
 evals %>%
-  select(contains("bty")) %>%
+  select(starts_with('bty')) %>%
   pairs()
 ```
 
@@ -219,6 +218,8 @@ following code.
 
 ```{r twoLines}
 plotModel(m_bty_gen)
+gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender) %>% 
+  gf_lm(score ~ bty_avg, data = m_bty_gen, color = ~ gender) 
 ```
 
 9.  What is the equation of the line corresponding to males? (*Hint:* For
