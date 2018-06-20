@@ -301,7 +301,7 @@ summary(m_full)
 
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). This lab was written by 
-Mine &Ccedil;etinkaya-Rundel and Andrew Bray.
+Mine &Ccedil;etinkaya-Rundel and Andrew Bray. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
 
 ## References
