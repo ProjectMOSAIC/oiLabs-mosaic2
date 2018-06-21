@@ -79,6 +79,7 @@ professors.
 ```{r load-data, message=FALSE}
 library(oilabs)
 library(dplyr)
+library(mosaic)
 data(evals)
 ```
 
@@ -128,7 +129,7 @@ are evaluated more favorably. Let's create a scatterplot to see if this appears
 to be the case:
 
 ```{r scatter-score-bty_avg}
-gf_point(score ~ bty_avg, data = evals)
+gf_point(score ~ bty_avg, data = evals, xlab = "Avg Beauty Rating")
 ```
 
 
@@ -143,7 +144,7 @@ Is anything awry?
 5.  Let's see if the apparent trend in the plot is something more than
     natural variation. Fit a linear model called `m_bty` to predict average
     professor score by average beauty rating and add the line to your plot
-    using the `type=c("p", "r")` argument or the `plotModel()` function. 
+    using the `gf_fun` function.
     Write out the equation for the linear model and
     interpret the slope. Is average beauty score a statistically significant
     predictor? Does it appear to be a practically significant predictor?
@@ -161,7 +162,7 @@ take a look at the relationship between one of these scores and the average
 beauty score.
 
 ```{r bty-rel}
-gf_point(bty_avg ~ bty_f1lower, data = evals)
+gf_point(bty_avg ~ bty_f1lower, data = evals, xlab = "Beauty Rating of Professor from Lower Level Female", ylab = "Avg Beauty Rating")
 cor(bty_avg ~ bty_f1lower, data = evals)
 ```
 
@@ -213,13 +214,15 @@ the intercept and slope form familiar from simple regression.
 &= \hat{\beta}_0 + \hat{\beta}_1 \times bty\_avg\end{aligned}
 \]
 
-We can plot this data and the line corresponding to males with the
+We can plot this data and the line corresponding to the effect of gender with the
 following code.
 
 ```{r twoLines}
-plotModel(m_bty_gen)
-gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender) %>% 
-  gf_lm(score ~ bty_avg, data = m_bty_gen, color = ~ gender) 
+m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
+l <- makeFun(m_bty_gen)
+gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender, xlab = "Avg Beauty Score", ylab = "Avg Professor Evaluation Score") %>% 
+  gf_fun(l(bty_avg, gender = "female") ~ bty_avg, color = ~"female") %>%
+  gf_fun(l(bty_avg, gender = "male") ~ bty_avg, color = ~"male") 
 ```
 
 9.  What is the equation of the line corresponding to males? (*Hint:* For
