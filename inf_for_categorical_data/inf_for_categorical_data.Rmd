@@ -91,7 +91,7 @@ If the conditions for inference are reasonable (check this!), we can calculate
 the standard error and construct the confidence interval.
 
 ```{r us-atheism-ci, tidy = FALSE}
-p <- tally(~response, data=us12, format='proportion')["atheist"]
+p <- tally(~ response, data = us12, format = 'proportion')["atheist"]
 n <- nrow(us12)
 se <- sqrt(p * (1-p) / n)
 p + qnorm(c(0.025, 0.975)) * se
@@ -186,7 +186,7 @@ p_hats <-
   resample(size = n, prob = c(p, 1-p)) %>%
   tally(format = "proportion")
 
-histogram(~atheist, data=p_hats, main = "p = 0.1, n = 1040")
+histogram(~ atheist, data = p_hats, main = "p = 0.1, n = 1040")
 ```
 
 These commands build up the sampling distribution of $\hat{p}$ using the 
