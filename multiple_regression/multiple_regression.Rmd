@@ -132,10 +132,10 @@ to be the case:
 gf_point(score ~ bty_avg, data = evals, xlab = "Avg Beauty Rating")
 ```
 
-
-Before we draw conclusions about the trend, compare the number of observations 
-in the data frame with the approximate number of points on the scatterplot. 
-Is anything awry?
+Before we draw conclusions about the trend, consider that students could each give the same beauty rating and 
+numerical scores for professors, resulting in identical coordinates in the data.
+These data points overlap in the scatter plot and make it hard to get a sense of the overall density. 
+To fix this problem, we can add random noise to the points by using the function `jitter()`. 
 
 4.  Replot the scatterplot, but this time use the function `jitter()` on the
     $y$ or the $x$-coordinate. (Use `?jitter` to learn more.) What was
