@@ -124,8 +124,8 @@ variable         | description
 
 ## Simple linear regression
 
-The fundamental phenomenon suggested by the study is that better looking teachers
-are evaluated more favorably. Let's create a scatterplot to see if this appears 
+Th study suggests a fundamental phenomenon of better looking teachers receiving
+higher evaluations. Let's create a scatterplot to see if this appears 
 to be the case:
 
 ```{r scatter-score-bty_avg}
@@ -134,7 +134,7 @@ gf_point(score ~ bty_avg, data = evals, xlab = "Avg Beauty Rating")
 
 Before we draw conclusions about the trend, consider that students could each give the same beauty rating and 
 numerical scores for professors, resulting in identical coordinates in the data.
-These data points overlap in the scatter plot and make it hard to get a sense of the overall density. 
+These data points would overlap in the scatter plot and make it hard to get a sense of the overall density. 
 To fix this problem, we can add random noise to the points by using the function `jitter()`. 
 
 4.  Replot the scatterplot, but this time use the function `jitter()` on the
@@ -205,6 +205,12 @@ indicator variable called `gendermale` that takes a value of $0$ for females and
 a value of $1$ for males. (Such variables are often referred to as "dummy" 
 variables.)
 
+The decision to call the indicator variable `gendermale` instead of`genderfemale`
+has no deeper meaning. R simply codes the category that comes first 
+alphabetically as a $0$. (You can change the reference level of a categorical 
+variable, which is the level that is coded as a 0, using the`relevel` function. 
+Use `?relevel` to learn more.)
+
 As a result, for females, the parameter estimate is multiplied by zero, leaving 
 the intercept and slope form familiar from simple regression.
 
@@ -229,12 +235,6 @@ gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender, xlab = "Avg Beauty
     males, the parameter estimate is multiplied by 1.) For two professors
     who received the same beauty rating, which gender tends to have the
     higher course evaluation score?
-
-The decision to call the indicator variable `gendermale` instead of`genderfemale`
-has no deeper meaning. R simply codes the category that comes first 
-alphabetically as a $0$. (You can change the reference level of a categorical 
-variable, which is the level that is coded as a 0, using the`relevel` function. 
-Use `?relevel` to learn more.)
 
 10. Create a new model called `m_bty_rank` with `gender` removed and `rank` 
     added in. How does R appear to handle categorical variables that have more 
@@ -306,5 +306,3 @@ summary(m_full)
 This is a product of OpenIntro that is released under a [Creative Commons Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). This lab was written by 
 Mine &Ccedil;etinkaya-Rundel and Andrew Bray. These materials were adapted to functions in the `mosaic` and `ggformula` packages by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
-
-## References
