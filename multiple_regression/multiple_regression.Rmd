@@ -150,8 +150,24 @@ To fix this problem, we can add random noise to the points by using the function
     predictor? Does it appear to be a practically significant predictor?
     
 6.  Use residual plots to evaluate whether the conditions of least squares
-    regression are reasonable. Provide plots and comments for each one (see
-    the Simple Regression Lab for a reminder of how to make these).
+    regression are reasonable. Provide plots and comments for each one. 
+    We have included code from the Open Intro Simple Regression Lab to serve as 
+    a template for your work (hint: change the variable and data names before running)
+    
+    ```{r residuals}
+gf_point(.stdresid ~ .fitted, data = m1) %>%
+  gf_hline(yintercept = 0, linetype = "dashed")%>%
+  gf_labs(x = "Fitted Values", y = "Residuals")
+
+gf_dhistogram(~ .stdresid, data = m1, bins = 6) %>% 
+  gf_fitdistr(dist = dnorm)
+
+gf_qq(~ .stdresid, data = m1) %>% 
+  gf_qqline()
+```
+
+Either the histogram with the Normal distribution overlay or the QQ-plot 
+can be used to assess the conditions of least squares regression. 
 
 ## Multiple linear regression
 
@@ -162,11 +178,11 @@ take a look at the relationship between one of these scores and the average
 beauty score.
 
 ```{r bty-rel}
-gf_point(bty_avg ~ bty_f1lower, data = evals, xlab = "Beauty Rating of Professor from Lower Level Female", ylab = "Avg Beauty Rating")
+gf_point(bty_avg ~ bty_f1lower, data = evals, xlab = "Beauty Rating of Professor from First or Second Year Female", ylab = "Avg Beauty Rating")
 cor(bty_avg ~ bty_f1lower, data = evals)
 ```
 
-As expected the relationship is quite strong - after all, the average score is 
+As expected, the relationship is quite strong - after all, the average score is 
 calculated using the individual scores. We can actually take a look at the 
 relationships between all beauty variables (columns 13 through 19) using the 
 following command:
@@ -227,8 +243,8 @@ following code.
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 l <- makeFun(m_bty_gen)
 gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender, xlab = "Avg Beauty Score", ylab = "Avg Professor Evaluation Score") %>% 
-  gf_fun(l(bty_avg, gender = "female") ~ bty_avg, color = ~"female") %>%
-  gf_fun(l(bty_avg, gender = "male") ~ bty_avg, color = ~"male") 
+  gf_fun(l(bty_avg, gender = "male") ~ bty_avg, color = ~"male") %>%
+  gf_fun(l(bty_avg, gender = "female") ~ bty_avg, color = ~"female")
 ```
 
 9.  What is the equation of the line corresponding to males? (*Hint:* For
