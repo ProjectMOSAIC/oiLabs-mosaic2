@@ -154,7 +154,7 @@ To fix this problem, we can add random noise to the points by using the function
     We have included code from the Open Intro Simple Regression Lab to serve as 
     a template for your work (hint: change the variable and data names before running)
     
-    ```{r residuals}
+```{r residuals, eval = FALSE}
 gf_point(.stdresid ~ .fitted, data = m1) %>%
   gf_hline(yintercept = 0, linetype = "dashed")%>%
   gf_labs(x = "Fitted Values", y = "Residuals")
@@ -241,11 +241,17 @@ following code.
 
 ```{r twoLines}
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
-l <- makeFun(m_bty_gen)
-gf_point(score ~ bty_avg, data = m_bty_gen, color = ~ gender, xlab = "Avg Beauty Score", ylab = "Avg Professor Evaluation Score") %>% 
-  gf_fun(l(bty_avg, gender = "male") ~ bty_avg, color = ~"male") %>%
-  gf_fun(l(bty_avg, gender = "female") ~ bty_avg, color = ~"female")
+lin_predict <- makeFun(m_bty_gen)
+
+evals %>%
+  mutate(gender = forcats::fct_relevel(gender, "male")) %>%
+  gf_point(score ~ bty_avg, data = ., color = ~ gender, xlab = "Avg Beauty Score", ylab = "Avg Professor Evaluation Score") %>% 
+    gf_line(lin_predict(bty_avg, gender = "female") ~ bty_avg, color = ~ "female") %>%
+    gf_line(lin_predict(bty_avg, gender = "male") ~ bty_avg, color = ~ "male") 
 ```
+The `makeFun()` function takes the name of the linear regression model as its argument to create 
+the `lin_predict()` function that we now have, which takes in the model's explanatory variables to 
+predict the valeus of the response variable.
 
 9.  What is the equation of the line corresponding to males? (*Hint:* For
     males, the parameter estimate is multiplied by 1.) For two professors
