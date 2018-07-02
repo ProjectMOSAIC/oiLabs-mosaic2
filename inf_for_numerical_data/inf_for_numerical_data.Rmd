@@ -66,9 +66,11 @@ the `nc` data, group it by `habit`, then summarize each groups' `weight` by taki
 the mean.
 
 ```{r by-means}
+# either of these will do the job.
 nc %>%
   group_by(habit) %>%
   summarize(mean(weight))
+df_stats( weight ~ habit, data = nc, mean)
 ```
 
 There is an observed difference, but is this difference statistically 

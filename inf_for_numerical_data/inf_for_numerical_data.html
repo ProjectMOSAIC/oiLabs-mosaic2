@@ -177,9 +177,11 @@ $(document).ready(function () {
 <li>Make a side-by-side boxplot of <code>habit</code> and <code>weight</code>. What does the plot highlight about the relationship between these two variables?</li>
 </ol>
 <p>The box plots show how the medians of the two distributions compare, but we can also compare the means of the distributions using the following chain to take the <code>nc</code> data, group it by <code>habit</code>, then summarize each groups’ <code>weight</code> by taking the mean.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nc <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># either of these will do the job.</span>
+nc <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(habit) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="kw">mean</span>(weight))</code></pre></div>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="kw">mean</span>(weight))
+<span class="kw">df_stats</span>( weight <span class="op">~</span><span class="st"> </span>habit, <span class="dt">data =</span> nc, mean)</code></pre></div>
 <p>There is an observed difference, but is this difference statistically significant? In order to answer this question we will conduct a hypothesis test.</p>
 </div>
 <div id="inference" class="section level2">
