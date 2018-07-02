@@ -34,14 +34,14 @@ and
 
 ## Required R packages
 
-To use these materials, a number of pakcages must be installed.  
+To use these materials, a number of packages must be installed.  
 
 ```{r, eval = FALSE}
 # install.packages("devtools")
-libary(devtools)
+library(devtools)
 install.packages("mosaic")
 install_github("OpenIntroOrg/openintro-r-package", subdir = "openintro", build_vignettes = TRUE)
-devtools::install_github("openIntroStat/oilabs", build_vignettes = TRUE)
+install_github("openIntroStat/oilabs", build_vignettes = TRUE)
 ```
 
 ## Building documents
