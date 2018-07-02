@@ -145,7 +145,7 @@ against each other to reveal their relationship.
 n <- 1000
 p <- seq(from = 0, to = 1, by = 0.01)
 ME <- 2 * sqrt(p * (1 - p)/n)
-xyplot(ME ~ p, ylab = "Margin of Error", xlab = "Population Proportion")
+gf_line(ME ~ p, ylab = "Margin of Error", xlab = "Population Proportion")
 ```
 
 8.  Describe the relationship between `p` and `ME`.
@@ -186,7 +186,7 @@ p_hats <-
   resample(size = n, prob = c(p, 1-p)) %>%
   tally(format = "proportion")
 
-histogram(~ atheist, data = p_hats, main = "p = 0.1, n = 1040")
+gf_histogram(~ atheist, data = p_hats, title = "p = 0.1, n = 1040")
 ```
 
 These commands build up the sampling distribution of $\hat{p}$ using the 
