@@ -43,9 +43,7 @@ portion of the lab we'll focus on the size of the house, represented by the
 variable `area`.
 
 ```{r sample}
-population <- ames %>% 
-  select(area) 
-samp <- sample(population, 60)
+sample60 <- sample(ames, 60)
 ```
 
 1.  Describe the distribution of your sample. What would you say is the 
@@ -62,7 +60,7 @@ distribution is to use the mean. In this case we can calculate the mean of the
 sample using,
 
 ```{r sample-mean}
-sample_mean <- mean(~ area, data = samp)
+sample_mean <- mean(~ area, data = sample60)
 ```
 
 Return for a moment to the question that first motivated this lab: based on 
@@ -87,7 +85,7 @@ zstar is actually the 97.5th percentile of the standard normal distribution.
 Now we can build the confidence interval:
 
 ```{r ci}
-se <- sd(~ area, data = samp) / sqrt(60)
+se <- sd(~ area, data = sample60) / sqrt(60)
 
 lower <- sample_mean - zstar * se
 
@@ -114,7 +112,7 @@ have data on the entire population. This value can be calculated using the
 following command:
 
 ```{r pop-mean}
-mean(~ area, data = population)
+mean(~ area, data = ames)
 ```
 
 5.  Does your confidence interval capture the true average size of houses in 
@@ -143,7 +141,7 @@ We can accomplish this using the `do` and `favstats` functions in `mosaic`. The 
 
 ```{r loop, tidy = FALSE}
 n <- 60
-samp_ci <- do(50) * favstats(~ area, data = sample(population, size = n))
+samp_ci <- do(50) * favstats(~ area, data = sample(ames, size = n))
 ```
 
 Lastly, we construct the confidence intervals.
@@ -169,8 +167,17 @@ The `slice()` function selects rows by position.
 Now, we can plot how many of our confidence intervals intersect the true population mean using the `plot_ci` function.
 
 ```{r plot-ci}
-with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = population)))
-#In addition, mosaic::CISim() has similar functionalities
+with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = ames)))
+# In addition, mosaic::CISim() has similar functionalities
+```
+
+```{r, include = FALSE}
+# This can also be done in native ggformula -- just need to do some work to 
+# to calculate which ones cover.
+pop.mean <- mean(~ area, data = ames)
+samp_ci <- samp_ci %>%
+  mutate(covers = pop.mean >= lower & pop.mean <= upper)
+gf_pointrange(mean + lower + upper ~ .index, data = samp_ci, color = ~covers)
 ```
 
 7. How many of your confidence intervals contained the true mean? Is this the number you expected to see?
@@ -184,7 +191,7 @@ So far, we have only focused on estimating the mean living area in homes in Ames
 - Create 50 random samples of size 60. Generate 95% confidence intervals for each of your samples, and plot the confidence intervals with the `plot_ci` function.  What proportion of your confidence intervals include the true population mean of `home price`? Is this proportion exactly equal to the confidence level? If not, explain why.
 
 ```{r plot-ci2, eval=FALSE}
-with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = population)))
+with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = ames)))
 ```
 
 - Pick a confidence level of your choosing, provided it is not 95% or 99%. What is the appropriate critical value?
