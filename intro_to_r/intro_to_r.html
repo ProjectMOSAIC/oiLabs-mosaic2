@@ -167,8 +167,9 @@ $(document).ready(function () {
 devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;andrewpbray/oilabs&quot;</span>)</code></pre></div>
 <p>Then, we can load the packages</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(oilabs)
-<span class="kw">library</span>(dplyr)
-<span class="kw">library</span>(ggplot2)</code></pre></div>
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## Warning: package 'dplyr' was built under R version 3.5.1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggformula)</code></pre></div>
 <div id="the-data-dr.arbuthnots-baptism-records" class="section level2">
 <h2>The Data: Dr. Arbuthnot’s Baptism Records</h2>
 <p>The data for this lab are Arbuthnot baptism counts for boys and girls, which we load into R as follows:</p>
@@ -229,6 +230,15 @@ devtools<span class="op">::</span><span class="kw">install_github</span>(<span c
 <p>Try the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?gf_line</code></pre></div>
 <p>Notice that the help file replaces the plot in the lower right panel. You can toggle between plots and help files using the tabs at the top of that panel.</p>
+<p>You can also get an abbreviated version of the help using</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_line</span>()</code></pre></div>
+<pre><code>## gf_line() uses 
+##     * a formula with shape y ~ x. 
+##     * geom:  line 
+##     * key attributes:  alpha, color, fill, group, linetype, size, lineend,
+##                    linejoin, linemitre, arrow
+## 
+## For more information, try ?gf_line</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Is there an apparent trend in the number of girls baptized over the years? How would you describe it?</li>
 </ol>
