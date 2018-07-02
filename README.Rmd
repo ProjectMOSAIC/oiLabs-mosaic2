@@ -43,3 +43,9 @@ install.packages("mosaic")
 install_github("OpenIntroOrg/openintro-r-package", subdir = "openintro", build_vignettes = TRUE)
 devtools::install_github("openIntroStat/oilabs", build_vignettes = TRUE)
 ```
+
+## Building documents
+
+`make.R` contains the commands required to build the documents.
+
+
