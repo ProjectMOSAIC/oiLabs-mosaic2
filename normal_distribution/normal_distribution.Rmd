@@ -7,8 +7,11 @@ output:
     css: ../lab.css
 ---
 
-```{r echo = FALSE}
+```{r include = FALSE, eval = TRUE}
 knitr::opts_chunk$set(eval = FALSE)
+library(mosaic)
+library(oilabs)
+library(tidyr)
 ```
 
 In this lab we'll investigate the probability distribution that is most central
@@ -26,7 +29,7 @@ healthy young adults. Let's take a quick peek at the first few rows of the data.
 ```{r load-data, message=FALSE, warning=FALSE, results='hide', eval=TRUE}
 library(mosaic)
 library(oilabs)
-data(bdims)
+data(bdims, package = "oilabs")
 head(bdims)
 ```
 
@@ -89,7 +92,7 @@ Frequency and density histograms all display the same shape; they only differ in
 
 Next we want to make a density histogram to use as the backdrop and overlay a normal probability curve. The function `gf_dhistogram()` creates a density histogram, and piping it into the `gf_fitdistr` function will accomplish the second task. Using a density histogram allows us to properly overlay a normal distribution curve over the histogram since the curve is a normal probability density function. 
 
-````{r hist-height, message=FALSE}
+```{r hist-height, message=FALSE}
 gf_dhistogram(~ hgt, data = fdims, bins = 15, xlab = "height") %>%
   gf_fitdistr(dist = dnorm)
 ```
@@ -108,7 +111,7 @@ close the histogram is to the curve. An alternative approach involves
 constructing a normal probability plot, also called a normal Q-Q plot for 
 "quantile-quantile".
 
-````{r qq}
+```{r qq}
 gf_qq(~ hgt, data = fdims) %>% 
   gf_qqline()
 ```
@@ -190,7 +193,7 @@ this is done in one step with the function `pnorm()`.
 Note that the function `pnorm` gives the area under the normal curve below a 
 given value, `q`, with a given mean and standard deviation.  
 
-```{r, echo=FALSE, fig.width=10, eval=TRUE, message=FALSE, results='hide'}
+```{r, echo=FALSE, fig.width=10, eval=FALSE, message=FALSE, results='hide'}
 1 - xpnorm(q = 182, mean = meanFheight, sd = sdFheight)
 ```
 
@@ -251,10 +254,53 @@ theoretical probabilities will be.
     your findings.
 
 
+```{r, echo = FALSE, fig.height = 8, fig.width = 3.5, eval = TRUE, fig.show = "hold"}
+standard <- function(x) { (x - base::mean(x)) / stats::sd(x) }
+fdims %>% 
+  dplyr::select(bii.di, elb.di, age, che.de) %>%
+  tidyr::gather(key = "variable", value = "value", bii.di, elb.di, age, che.de) %>%
+  group_by(variable) %>%
+  mutate(svalue = standard(value)) %>%
+  gf_dhistogram( ~ svalue)  %>%
+  gf_facet_grid(variable ~ ., scales = "free")
+
+fdims %>% 
+  dplyr::select(bii.di, elb.di, age, che.de) %>%
+  tidyr::gather(key = "variable", value = "value", bii.di, elb.di, age, che.de) %>%
+  group_by(variable) %>%
+  mutate(
+    svalue = standard(value),
+    distribution = case_when(
+      variable == "bii.di" ~ "B", 
+      variable == "elb.di" ~ "D", 
+      variable == "age" ~ "C", 
+      variable == "che.de" ~ "A")
+    ) %>%
+  gf_qq( ~ svalue, size = 0.5) %>%
+  gf_facet_grid(distribution ~ ., scales = "free")
+```
+
+<!-- ![histQQmatch](more/histQQmatchgg.png) -->
 
 
-![histQQmatch](more/histQQmatchgg.png)
-
+```{r, include = FALSE}
+## rjp note to self about more flexible version of qqnormsim()
+qqnormsim2 <- function (sample, data, reps = 8) 
+{
+    orig.data <- eval(substitute(sample), data)
+    PlotData <-
+      expand.grid(sample = 1:(reps + 1), row = 1:nrow(data)) %>%
+      mutate(x = rnorm((reps + 1) * nrow(data), mean = mean(orig.data), sd = sd(orig.data))) 
+    
+    orig <- base::sample(1:(reps + 1), 1)
+    
+    PlotData[PlotData$sample == orig, "x"] <- orig.data
+      
+    ggplot(data = PlotData, aes_string(sample = "x")) + 
+      stat_qq() + 
+      facet_wrap( ~ sample, scales = "free")
+}
+```
 
 
 <div id="license">
