@@ -38,8 +38,6 @@ If you see the error message "package not found", refer to the Appendix for trou
 
 The `mosaic` package is designed by a team of NSF-funded educators to be suitable for introductory statistics courses as it provides a simple, user-friendly interface with powerful functions for descriptive statistics, visualization, modeling, and simulation-based inference. The package streamlines all of the commands that you will need in this course. For more information about the package, click to see the [R documentation](https://cran.r-project.org/web/packages/mosaic/index.html) or Project MOSAIC's [Student Guide to R](http://project-mosaic-books.com/?page_id=24).  
 
-R has some powerful functions for making graphics. 
-
 ## The Data: Dr. Arbuthnot's Baptism Records
 
 The data for this lab are Arbuthnot baptism counts for boys and girls, which we load into R as follows:
@@ -62,7 +60,7 @@ Note that the row numbers in the first column are not part of Arbuthnot's data. 
 
 You can confirm this by typing: 
 
-```{r class-data, eval=TRUE}
+```{r class-data}
 class(arbuthnot)
 ```
 
@@ -70,7 +68,7 @@ Now that you know that you have tabular data at hand, a useful next step is to g
 
 Find the dimensions of this data frame by typing:
 
-```{r dim-data, eval=TRUE}
+```{r dim-data}
 dim(arbuthnot)
 ```
 
@@ -78,14 +76,14 @@ This command should output `[1] 82 3`, indicating that there are 82 rows and 3 c
 
 Find the names of these columns (or variables) by typing:
 
-```{r names-data, eval=TRUE}
+```{r names-data}
 names(arbuthnot)
 ```
 
 You should see that the data frame contains the columns `year`,  `boys`, and `girls`. At this point, you might notice that many of the commands in R look a lot like functions from math class; that is, invoking R commands means supplying a function with some number of arguments. The `dim()` and `names()` commands, for example, each took a single argument, the name of a data frame. 
 
 A concise way to get the above information is to type:
-```{r structure-data, eval=TRUE}
+```{r structure-data}
 str(arbuthnot)
 ```
 
@@ -112,39 +110,36 @@ The centerpiece of the `mosaic` syntax is the use of the *modeling language*. Th
 
 We can create a simple plot of the number of girls baptized per year with the command:
 
-```{r plot-girls-vs-year, eval=FALSE, message=FALSE}
+```{r plot-girls-vs-year, message=FALSE}
 gf_point(girls ~ year, data = arbuthnot)
 ```
 
 By default, R creates a scatterplot with each x, y pair indicated by a filled circle. The plot itself should appear under the *Plots* tab of the lower right panel of RStudio. Notice that the command above is a function called `gf_point()` that takes two arguments separated by a comma.  The first argument to the `gf_point()` function is a formula of the form `y ~ x` that specifies which variable should go on the vertical (`y`) axis and which should go on the horizontal (`x`) axis. The second argument, `data`, tells R where to find the `girls` and `year` variables -- in this case, they are inside the data frame called `arbuthnot`. You will find that you can perform most of the operations that you will see in this class using this simple template**. 
 
-If we wish to plot lines instead of points, we can change the `plottype` in the {ggformula} function that you type. `plottype` describes the type of plot desired (points, lines, a histogram, etc.)
+Different functions in the `ggformula` package will output different types of plot. For example, if we wished to plot lines instead of points, we could type: 
 
-```{r plot-girls-vs-year-line, eval=FALSE}
+```{r plot-girls-vs-year-line}
 gf_line(girls ~ year, data = arbuthnot)
 ```
 
-You might wonder how you are supposed to know that it was possible to change the plot to represent the x, y pairs as lines, rather than circles. When you type the following code: 
-```{r list-package-functions, eval=FALSE}
-ls("package:ggformula")
-```
-you will get a list (what `ls` stands for) of the included functions in the package.
+Both the `gf_point()` and the `gf_line()` functions are a part of the `ggformula` package. The `ggformula` package combines the power of the `ggplot2` package with the streamlined syntax of the `mosaic` package. Refer to the Appendix to explore the further package's functionalities. 
 
-Once you have found the desired function, you may enlist R's help to feed the necessary arguments. Since R extensively documents all of its functions, to read what a function does and learn the arguments that are available to you, just type in a question mark followed by the name of the function that you're interested in. 
+Once you have the desired function, you may enlist R's help to feed the necessary arguments. Since R extensively documents all of its functions, to read what a function does and learn the arguments that are available to you, just type in a question mark followed by the name of the function that you're interested in. 
 
 Try the following:
 
-```{r plot-help, eval=FALSE, tidy=FALSE}
+```{r plot-help, tidy=FALSE}
 ?gf_line
 ```
 
 Notice that the help file replaces the plot in the lower right panel. You can toggle between plots and help files using the tabs at the top of that panel.
 
-You can also get an abbreviated version of the help using
+You can also get an abbreviated version of the help using:
 
-```{r, eval = TRUE}
+```{r}
 gf_line()
 ```
+An abbreviated version of the help output should appear in red right under your code or in the Console. 
 
 2.  Is there an apparent trend in the number of girls baptized over the years? How would you describe it?
 
@@ -229,7 +224,7 @@ This seems like a fair bit for your first lab, so let's stop here. To exit RStud
 
 In the previous few pages, you recreated some of the displays and preliminary analysis of Arbuthnot's baptism data. Your assignment involves repeating these steps, but for present day birth records in the United States. Load up the present day data with the following command.
 
-```{r load-present-data, eval=FALSE}
+```{r load-present-data}
 data(present)
 ```
 
@@ -249,10 +244,8 @@ These data come from a report by the Centers for Disease Control [http://www.cdc
 *To use packages, you will need to first install them. To install packages, run the commands below. It may take a few minutes; you'll know when the packages have finished installing when you see the R prompt return in your console. 
 XX installing packages `cdc` data error still present 
 
-```{r load-mosaic-devtools-oilabs, message=FALSE, eval=FALSE}
+```{r load-mosaic-devtools-oilabs, message=FALSE}
 install.packages(c("mosaic", "devtools"))
-devtools::install_github("andrewpbray/oilabs")
-
 devtools::install_github("OpenIntroStat/oilabs")
 ```
 How you can install a package depends on its source. Here, `mosaic` and `devtools` are installed from the CRAN repository, which is maintained by RStudio, whereas other packages, like `oilabs`, are installed from Github. 
@@ -260,6 +253,11 @@ How you can install a package depends on its source. Here, `mosaic` and `devtool
 You will only have to install packages *once*. However once the package is installed, you will have to load it into the current workspace before it can be used by using the `library()` function. Note that you will have to do this *every* time you start a new R session. 
 
 **Please see the [Less Volume, More Creativity](https://cran.r-project.org/web/packages/mosaic/vignettes/LessVolume-MoreCreativity.html) vignette for more information about the simple syntax of `mosaic`. 
+
+***You might wonder how you are supposed to know that it was possible to change the plot to represent the x, y pairs as lines, rather than circles. You can get a list (what `ls()` stands for) of the included functions in the package when you type the following code: 
+```{r list-package-functions, eval=FALSE}
+ls("package:ggformula")
+```
 
 That was a short introduction to R and RStudio, but we will provide you with more functions and a more complete sense of the language as the course progresses. Feel free to browse around the websites for [R](http://www.r-project.org) and [RStudio](http://rstudio.org) if you're interested in learning more, or find more labs for practice at the [OpenIntro](http://openintro.org) webpage.
 
