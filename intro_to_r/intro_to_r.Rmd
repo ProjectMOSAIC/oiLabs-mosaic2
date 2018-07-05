@@ -255,7 +255,7 @@ You will only have to install packages *once*. However once the package is insta
 **Please see the [Less Volume, More Creativity](https://cran.r-project.org/web/packages/mosaic/vignettes/LessVolume-MoreCreativity.html) vignette for more information about the simple syntax of `mosaic`. 
 
 ***You might wonder how you are supposed to know that it was possible to change the plot to represent the x, y pairs as lines, rather than circles. You can get a list (what `ls()` stands for) of the included functions in the package when you type the following code: 
-```{r list-package-functions, eval=FALSE}
+```{r list-package-functions}
 ls("package:ggformula")
 ```
 
