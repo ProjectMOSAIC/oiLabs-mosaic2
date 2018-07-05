@@ -139,7 +139,7 @@ A useful way to address this question is to rephrase it as: what do probability
 plots look like for data that I *know* came from a normal distribution?  We can 
 answer this by simulating data from a normal distribution using `rnorm`.
 
-````{r sim-norm}
+```{r sim-norm}
 sim_norm <- rnorm(n = nrow(fdims), mean = meanFheight, sd = sdFheight)
 ```
 
