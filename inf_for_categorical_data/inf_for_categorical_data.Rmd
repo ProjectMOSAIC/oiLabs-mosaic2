@@ -9,13 +9,16 @@ output:
 ---
 
 ```{r opts, include=FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-```
-
-```{r load-packages, message=FALSE}
+library(knitr)
 library(mosaic)
 library(oilabs)
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+```{r load-packages, message=FALSE, eval=FALSE}
 library(knitr)
+library(mosaic)
+library(oilabs)
 ```
 
 In August of 2012, news outlets ranging from the [Washington
@@ -176,8 +179,8 @@ process of drawing 5000 samples of size 1040 from a population with a true
 atheist proportion of 0.1. For each of the 5000 samples we compute $\hat{p}$ 
 and then plot a histogram to visualize their distribution.
 
-Here, we first `resample` $n$ times from the list of `responses`, with the 
-probability of drawing `"atheist"` equal to $p = 0.1$. Then we `tally` the 
+Here, we first `resample()` $n$ times from the list of `responses`, with the 
+probability of drawing `"atheist"` equal to $p = 0.1$. Then we `tally()` the 
 proportion of those responses that are `"atheist"`. We `do` this 500 times. 
 
 ```{r sim-np, tidy=FALSE}
@@ -198,14 +201,14 @@ These commands build up the sampling distribution of $\hat{p}$ using the
 familiar `do` loop. You can read the sampling procedure for the inner bit of 
 code as, "take a sample of size $n$ with replacement 
 from the choices of atheist and non-atheist with probabilities $p$ and $1 - p$,
-respectively." The `tally` command says, "calculate the proportion of 
+respectively." The `tally()` command says, "calculate the proportion of 
 atheists in this sample and record this value." The loop allows us to repeat 
 this process 5,000 times to build a good representation of the sampling 
 distribution.
 
 9.  Describe the sampling distribution of sample proportions at $n = 1040$ and 
     $p = 0.1$. Be sure to note the center, spread, and shape.\
-    *Hint:* Remember that R has functions such as `mean` to calculate summary
+    *Hint:* Remember that R has functions such as `favstats()` to calculate summary
     statistics.
 
 10. Repeat the above simulation three more times but with modified sample
@@ -262,5 +265,7 @@ from 2005 and 2012 for 39 countries.
 <div id="license">
 This is a product of OpenIntro that is released under a [Creative Commons 
 Attribution-ShareAlike 3.0 Unported](http://creativecommons.org/licenses/by-sa/3.0). 
-This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel.
+This lab was written for OpenIntro by Andrew Bray and Mine &Ccedil;etinkaya-Rundel. 
+These materials were adapted to functions in the `mosaic` and `ggformula` packages 
+by Nicholas Horton and Bonnie Lin (Amherst College).
 </div>
