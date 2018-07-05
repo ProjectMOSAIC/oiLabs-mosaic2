@@ -9,15 +9,16 @@ output:
 ---
 
 ```{r opts, include=FALSE}
+library(knitr)
+library(mosaic)
+library(oilabs)
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-```{r load-packages, message=FALSE}
+```{r load-packages, message=FALSE, eval=FALSE}
+library(knitr)
 library(mosaic)
 library(oilabs)
-library(knitr)
-library(dplyr)
-library(ggplot2)
 ```
 
 ## North Carolina births
@@ -38,7 +39,8 @@ head(nc)
 ```
 
 We have observations on 13 different variables, some categorical and some 
-numerical. You can read more about each one in the help file.
+numerical. Not only can you get help in R for functions, you can also get help 
+in R for data. You can read more about each one in the help file:
 
 ```{r nc_help}
 ?nc
@@ -71,15 +73,19 @@ the `nc` data, group it by `habit`, then summarize each groups' `weight` by taki
 the mean.
 
 ```{r by-means}
-# either of these will do the job.
 nc %>%
   group_by(habit) %>%
   summarize(mean(weight))
-df_stats( weight ~ habit, data = nc, mean)
+```
+
+Alternatively, we could use the `df_stats()` function to create a data frame of 
+the babies' means separated by whether the mother smokes or not.  
+```{r by-means-alternative}
+df_stats(weight ~ habit, data = nc, mean)
 ```
 
 There is an observed difference, but is this difference statistically 
-significant? In order to answer this question we will conduct a hypothesis test.
+significant? In order to answer this question, we will conduct a hypothesis test.
 
 ## Inference
 

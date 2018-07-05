@@ -7,7 +7,7 @@ output:
     css: ../lab.css
 ---
 
-Some define Statistics as the field that focuses on turning information into
+Some people define statistics as the field that focuses on turning information into
 knowledge. The first step in that process is to summarize and describe the raw
 information - the data. In this lab, you will gain insight into public health
 by generating simple graphical and numerical summaries of a data set collected 
@@ -36,13 +36,26 @@ After launching RStudio, enter the following command:
 
 ```{r opts, eval=TRUE, echo=FALSE}
 library(knitr)
-opts_chunk$set(eval=FALSE)
+library(mosaic)
+library(ggformula)
+library(readr)
+library(oilabs)
+opts_chunk$set(eval=TRUE)
+```
+
+```{r load-packages, eval=FALSE}
+library(mosaic)
+library(ggformula)
+library(readr)
+library(oilabs)
 ```
 
 ```{r load-data}
-require(oilabs)
-data(cdc)
+cdc <- read_csv("https://www.openintro.org/stat/data/cdc.csv")
 ```
+By default, `read_csv()` prints the variable names. These messages can be 
+suppressed using the `message = FALSE` code chunk option to save space and 
+improve readability.
 
 The data set `cdc` that shows up in your workspace is a *data matrix*, with each
 row representing a *case* and each column representing a *variable*. R calls 
@@ -93,8 +106,9 @@ that you'll learn in a moment.
 
 The BRFSS questionnaire is a massive trove of information. A good first step in
 any analysis is to distill all of that information into a few summary statistics
-and graphics. As a simple example, the function `favstats` returns a numerical 
-summary: minimum, first quartile, median, third quartile, maximum, mean, standard deviation, number of observations, and number of missing values.
+and graphics. As a simple example, the function `favstats()` returns a numerical 
+summary: minimum, first quartile, median, third quartile, maximum, mean, standard 
+deviation, number of observations, and number of missing values.
 For `weight`, this is:
 
 ```{r summary-weight}
@@ -105,7 +119,7 @@ cdc %>%
 
 This takes the `cdc` dataset and **pipes** it into the `select` function. This 
 function then select the variable called `weight`, and **pipe** this 
-variable into the `summary` function.
+variable into the `summary()` function.
 
 Since R also functions like a very fancy calculator, you can use these statistics
 to then calculate the interquartile range for the respondents' weight, as the value
@@ -115,19 +129,17 @@ of Q3 - Q1:
 190 - 140
 ```
 
-You can also individually calculate summary statistics, and make your own customized list
-of them using the `summarise` function:
+You can use the `favstats()` function in the `mosaic` package to collect summary
+statistics:
 
 ```{r summary-custom-list}
-cdc %>%
-  summarise(mean_wt = mean(weight), sd_wt = sd(weight), mean_ht = mean(height), sd_ht = sd(height))
+favstats(~ height, data = cdc)
+favstats(~ weight, data = cdc)
 ```
 
-Note that in the `summarise` function we created a list of four elements. The names
-of these elements are user defined, like `mean_wt`, `sd_wt`, etc. and you could
-customize these names as you like (just don't use spaces in your names). Calculating
-these summary statistics also require that you know the function calls. Some useful
-function calls for summary statistics for a single numerical variable are as follows:
+The output of the `favstats()` function summarizes several descriptive statistics that 
+are useful for numerical data. If we are interested in finding specific statistics, some 
+useful function calls for a single numerical variable are as follows:
 
 - `mean`
 - `median`
@@ -137,11 +149,6 @@ function calls for summary statistics for a single numerical variable are as fol
 - `range`
 - `min`
 - `max`
-
-which means we want the element of our data set that is in the 567<sup>th</sup> 
-row (meaning the 567<sup>th</sup> person or observation) and the 6<sup>th</sup> 
-column (in this case, weight). We know that `weight` is the 6<sup>th</sup> variable
-because it is the 6<sup>th</sup> entry in the list of variable names:
 
 ```{r summary-custom-list-gender}
 cdc %>%
@@ -164,7 +171,7 @@ tally(~ smoke100, data = cdc)
 
 or instead look at the relative frequency distribution by typing:
 
-```{r tally-smoke-prop, eval=FALSE}
+```{r tally-smoke-prop}
 tally(~ smoke100, data = cdc, format = "proportion")
 ```
 
@@ -176,7 +183,7 @@ The `tally` command can be used to tabulate any number of variables that you
 provide.  For example, to examine which participants have smoked across each 
 gender, we could use the following:
 
-```{r table-smoke-gender, eval=FALSE}
+```{r table-smoke-gender}
 tally(gender ~ smoke100, data = cdc, format = "count")
 ```
 The output of this function is a contigency table. Here, we see column labels of 0 and 1. 
@@ -184,7 +191,7 @@ Recall that 1 indicates a respondent has smoked at least 100 cigarettes. The row
 refer to gender. To create a mosaic plot (no relation to the package name) of this table, 
 we would enter the following command: 
 
-```{r mosaic-smoke-gender, eval=FALSE}
+```{r mosaic-smoke-gender}
 tally(gender ~ smoke100, data = cdc) %>% 
   vcd::mosaic(shade = TRUE, legend = F)
 
@@ -386,7 +393,7 @@ between the different bins.  You can control the number of bins by adding an
 argument to the command. In the next two lines, we first make a default 
 histogram of `bmi` and then one with 50 intervals:
 
-```{r hist-bmi, eval=FALSE}
+```{r hist-bmi}
 gf_dhistogram(~ bmi, data = cdc)
 gf_dhistogram(~ bmi, data = cdc, bins = 50)
 ```
