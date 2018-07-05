@@ -12,7 +12,7 @@ output:
 library(knitr)
 library(mosaic)
 library(oilabs)
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 ```
 
 ```{r load-packages, message=FALSE, eval=FALSE}
