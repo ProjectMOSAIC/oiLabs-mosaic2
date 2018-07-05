@@ -285,21 +285,41 @@ fdims %>%
 
 ```{r, include = FALSE}
 ## rjp note to self about more flexible version of qqnormsim()
-qqnormsim2 <- function (sample, data, reps = 8) 
+library(ggformula)
+library(mosaicData)
+library(dplyr)
+theme_set(theme_bw())
+qqnormsim2 <- function (sample, data, reps = 8, hide = FALSE, ..., scales = "free") 
 {
     orig.data <- eval(substitute(sample), data)
     PlotData <-
-      expand.grid(sample = 1:(reps + 1), row = 1:nrow(data)) %>%
-      mutate(x = rnorm((reps + 1) * nrow(data), mean = mean(orig.data), sd = sd(orig.data))) 
+      expand.grid(rep = 1:(reps + 1), row = 1:nrow(data)) %>%
+      mutate(
+        x = rnorm((reps + 1) * nrow(data), mean = mean(orig.data), sd = sd(orig.data))
+      ) 
     
-    orig <- base::sample(1:(reps + 1), 1)
+    if (hide) { 
+      orig <- base::sample(1:(reps + 1), 1)
+    } else {
+      PlotData$rep <- PlotData$rep - 1
+      orig <- 0
+    }
     
-    PlotData[PlotData$sample == orig, "x"] <- orig.data
+    PlotData$rep_label = paste("sim", PlotData$rep)
+    PlotData[PlotData$rep == orig, "x"] <- orig.data
+    
+    if (!hide) {
+      PlotData[PlotData$rep == orig, "rep_label"] <- "original data"
+    }
+    
+    PlotData$rep_label <- reorder(PlotData$rep_label, PlotData$rep)
       
-    ggplot(data = PlotData, aes_string(sample = "x")) + 
-      stat_qq() + 
-      facet_wrap( ~ sample, scales = "free")
+    ggformula::gf_qq(~ x, data = PlotData, ...) %>%
+      gf_facet_wrap( ~ rep_label, scales = scales)
 }
+
+qqnormsim2(length, data = KidsFeet, reps = 11)
+qqnormsim2(length, data = KidsFeet, reps = 11, size = 0.4, color = "red", hide = TRUE)
 ```
 
 

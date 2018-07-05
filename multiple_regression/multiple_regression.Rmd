@@ -137,10 +137,14 @@ numerical scores for professors, resulting in identical coordinates in the data.
 These data points would overlap in the scatter plot and make it hard to get a sense of the overall density. 
 To fix this problem, we can add random noise to the points by using the function `jitter()`. 
 
-4.  Replot the scatterplot, but this time use the function `jitter()` on the
-    $y$ or the $x$-coordinate. (Use `?jitter` to learn more.) What was
-    misleading about the initial scatterplot?
+4.  Replot the scatterplot, but this time use the function `gf_jitter()` in place   
+    of `gf_point()`.  
+    (Use `?gf_jitter` or `gf_jitter()` to learn more.) 
+    What was misleading about the initial scatterplot?
 
+```{r scatter-score-bty_avg-jitter, include = FALSE}
+gf_jitter(score ~ bty_avg, data = evals, xlab = "Avg Beauty Rating")
+```
 5.  Let's see if the apparent trend in the plot is something more than
     natural variation. Fit a linear model called `m_bty` to predict average
     professor score by average beauty rating and add the line to your plot
@@ -188,9 +192,10 @@ relationships between all beauty variables (columns 13 through 19) using the
 following command:
 
 ```{r bty-rels}
+library(GGally)
 evals %>%
   select(starts_with('bty')) %>%
-  pairs()
+  ggscatmat()
 ```
 
 These variables are collinear (correlated), and adding more than one of these 

@@ -277,7 +277,9 @@ $(document).ready(function () {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(score <span class="op">~</span><span class="st"> </span>bty_avg, <span class="dt">data =</span> evals, <span class="dt">xlab =</span> <span class="st">&quot;Avg Beauty Rating&quot;</span>)</code></pre></div>
 <p>Before we draw conclusions about the trend, consider that students could each give the same beauty rating and numerical scores for professors, resulting in identical coordinates in the data. These data points would overlap in the scatter plot and make it hard to get a sense of the overall density. To fix this problem, we can add random noise to the points by using the function <code>jitter()</code>.</p>
 <ol start="4" style="list-style-type: decimal">
-<li><p>Replot the scatterplot, but this time use the function <code>jitter()</code> on the <span class="math inline">\(y\)</span> or the <span class="math inline">\(x\)</span>-coordinate. (Use <code>?jitter</code> to learn more.) What was misleading about the initial scatterplot?</p></li>
+<li><p>Replot the scatterplot, but this time use the function <code>gf_jitter()</code> in place<br />
+of <code>gf_point()</code>.<br />
+(Use <code>?gf_jitter</code> or <code>gf_jitter()</code> to learn more.) What was misleading about the initial scatterplot?</p></li>
 <li><p>Let’s see if the apparent trend in the plot is something more than natural variation. Fit a linear model called <code>m_bty</code> to predict average professor score by average beauty rating and add the line to your plot using the <code>gf_lm</code> function. Write out the equation for the linear model and interpret the slope. Is average beauty score a statistically significant predictor? Does it appear to be a practically significant predictor?</p></li>
 <li><p>Use residual plots to evaluate whether the conditions of least squares regression are reasonable. Provide plots and comments for each one. We have included code from the Open Intro Simple Regression Lab to serve as a template for your work (hint: change the variable and data names before running)</p></li>
 </ol>
@@ -298,9 +300,10 @@ $(document).ready(function () {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">gf_point</span>(bty_avg <span class="op">~</span><span class="st"> </span>bty_f1lower, <span class="dt">data =</span> evals, <span class="dt">xlab =</span> <span class="st">&quot;Beauty Rating of Professor from First or Second Year Female&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Avg Beauty Rating&quot;</span>)
 <span class="kw">cor</span>(bty_avg <span class="op">~</span><span class="st"> </span>bty_f1lower, <span class="dt">data =</span> evals)</code></pre></div>
 <p>As expected, the relationship is quite strong - after all, the average score is calculated using the individual scores. We can actually take a look at the relationships between all beauty variables (columns 13 through 19) using the following command:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">evals <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(GGally)
+evals <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">'bty'</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">pairs</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">ggscatmat</span>()</code></pre></div>
 <p>These variables are collinear (correlated), and adding more than one of these variables to the model would not add much value to the model. In this application and with these highly-correlated predictors, it is reasonable to use the average beauty score as the single representative of these variables.</p>
 <p>In order to see if beauty is still a significant predictor of professor score after we’ve accounted for the gender of the professor, we can add the gender term into the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m_bty_gen &lt;-<span class="st"> </span><span class="kw">lm</span>(score <span class="op">~</span><span class="st"> </span>bty_avg <span class="op">+</span><span class="st"> </span>gender, <span class="dt">data =</span> evals)

@@ -68,10 +68,10 @@ variables record the respondent's `height` in inches, `weight` in pounds as well
 as their desired weight, `wtdesire`, `age` in years, and `gender`.
 
 A very useful function for taking a quick peek at your dataset, and viewing
-its dimensions and data types is `str`:
+its dimensions and data types is `glimpse`:
 
 ```{r cdc}
-str(cdc)
+glimpse(cdc)
 ```
 
 Note that R calls categorical variables `factor`s.

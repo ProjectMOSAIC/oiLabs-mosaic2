@@ -37,7 +37,7 @@ Then, we can load the packages
 ```{r load-packages, eval=TRUE, message=FALSE}
 library(oilabs)
 library(dplyr)
-library(ggplot2)
+library(ggformula)
 ```
 
 
@@ -159,6 +159,12 @@ Try the following:
 ```
 
 Notice that the help file replaces the plot in the lower right panel. You can toggle between plots and help files using the tabs at the top of that panel.
+
+You can also get an abbreviated version of the help using
+
+```{r, eval = TRUE}
+gf_line()
+```
 
 2.  Is there an apparent trend in the number of girls baptized over the years? How would you describe it?
 
