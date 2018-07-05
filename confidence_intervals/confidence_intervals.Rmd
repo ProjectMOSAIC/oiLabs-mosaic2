@@ -25,13 +25,16 @@ In the previous lab, "Sampling Distributions", we looked at the population data
 of houses from Ames, Iowa. Let's start by loading that data set.
 
 ```{r, echo=FALSE}
-library(knitr)
 opts_chunk$set(eval = FALSE)
 ```
 
+```{r load-packages, message=FALSE}
+library(mosaic)
+library(oilabs)
+library(knitr)
+```
+
 ```{r load-data, message=FALSE}
-require(mosaic)
-require(oilabs)
 data(ames)
 head(ames)
 ```

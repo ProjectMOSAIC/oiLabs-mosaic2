@@ -12,6 +12,12 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
+```{r load-packages, message=FALSE}
+library(mosaic)
+library(oilabs)
+library(knitr)
+```
+
 In August of 2012, news outlets ranging from the [Washington
 Post](http://www.washingtonpost.com/national/on-faith/poll-shows-atheism-on-the-rise-in-the-us/2012/08/13/90020fd6-e57d-11e1-9739-eef99c5fb285_story.html) to the [Huffington
 Post](http://www.huffingtonpost.com/2012/08/14/atheism-rise-religiosity-decline-in-america_n_1777031.html)
@@ -45,9 +51,8 @@ a useful format to summarize the data, we will base our analysis on the
 original data set of individual responses to the survey. Load the necessary 
 packages and the data set into R with the following command.
 
+
 ```{r load-data, message=FALSE}
-library(oilabs)
-library(mosaic)
 data(atheism)
 ```
 

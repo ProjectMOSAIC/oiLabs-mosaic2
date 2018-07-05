@@ -12,6 +12,14 @@ output:
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
+```{r load-packages, message=FALSE}
+library(mosaic)
+library(oilabs)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+```
+
 ## North Carolina births
 
 In 2004, the state of North Carolina released a large data set containing 
@@ -25,9 +33,6 @@ observations from this data set.
 Load the `nc` data set into our workspace.
 
 ```{r load-data, message = FALSE}
-library(dplyr)
-library(ggplot2)
-library(oilabs)
 data(nc)
 head(nc)
 ```
