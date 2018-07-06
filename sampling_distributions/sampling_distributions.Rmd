@@ -84,7 +84,7 @@ samp1 <- ames %>%
   sample_n(50)
 ```
 
-The `sample_n` function collects a simple random sample of size 50 from the `ames` 
+The `sample_n()` function collects a simple random sample of size 50 from the `ames` 
 dataset, which is assigned to `samp1`. This is like going into the City 
 Assessor's database and pulling up the files on 50 random home sales. Working 
 with these 50 observations would be considerably simpler than working with all 2930 
@@ -165,7 +165,7 @@ sample_means50[4] <- mean(~ area, data = resample(ames, 50))
 # ...and so on, 2000 times
 ```
 
-With the `do` function, these lines of code are expressed 
+With the `do()` function, these lines of code are expressed 
 into one line:
 
 ```{r do-again}
@@ -218,7 +218,7 @@ from. Remember the first 2,000 sample means came from samples of size 10, the ne
 2,000 sample means came from samples of size 50, and the last 2,000 sample means
 came from samples of size 100. Hence, this new variable is simply $10$ `rep`eated 
 2,000 times, followed by $50$ repeated 2000 times, followed by $100$ repeated 2,000 
-times. The use of the `factor` function will ensure that `R` considers this to be a 
+times. The use of the `factor()` function will ensure that `R` considers this to be a 
 categorical variable, and not a numerical one. Also remember that we use the `mutate()`
 function to create new variables in data frames.
 

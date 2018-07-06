@@ -21,29 +21,33 @@ population looks like.
 
 ## The data
 
-In the previous lab, "Sampling Distributions", we looked at the population data
-of houses from Ames, Iowa. Let's start by loading that data set.
-
-```{r, echo=FALSE}
-opts_chunk$set(eval = FALSE)
-```
-
-```{r load-packages, message=FALSE}
+```{r opts, include=FALSE}
 library(mosaic)
 library(oilabs)
-library(knitr)
+library(ggformula)
+knitr::opts_chunk$set(eval = TRUE)
 ```
+
+```{r load-packages, message=FALSE, eval=FALSE}
+library(mosaic)
+library(oilabs)
+library(ggformula)
+```
+
+In the previous lab, "Sampling Distributions", we looked at the population data
+of houses from Ames, Iowa. Let's start by loading that data set:
 
 ```{r load-data, message=FALSE}
 data(ames)
-head(ames)
+glimpse(ames)
 ```
 
+Note that the data set has information on many housing variables, 
+but for the first portion of the lab we'll focus on the size of the house, 
+represented by the variable `area`.
+
 In this lab we'll start with a simple random sample of size 60 from the 
-population. Note that 
-the data set has information on many housing variables, but for the first 
-portion of the lab we'll focus on the size of the house, represented by the 
-variable `area`.
+population. Let's create this sample with the following code: 
 
 ```{r sample}
 sample60 <- sample(ames, 60)
@@ -140,7 +144,10 @@ Here is the rough outline:
 -   Repeat steps (1) and (2) 50 times.
 -   Use these stored statistics to calculate many confidence intervals.
 
-We can accomplish this using the `do` and `favstats` functions in `mosaic`. The following lines of code take a uniform random `sample` of size 60 from `population`, computes several summary statistics (including `mean` and `sd`), and then does this 50 times and saves the result as a data frame. 
+We can accomplish this using the `do()` and `favstats()` functions in the 
+`mosaic` package. The following lines of code take a uniform random `sample()` 
+of size 60 from `population`, computes several summary statistics 
+(including `mean` and `sd`), and then does this 50 times and saves the result as a data frame. 
 
 ```{r loop, tidy = FALSE}
 n <- 60
@@ -180,7 +187,7 @@ with(samp_ci, plot_ci(lower, upper, m = mean(~ area, data = ames)))
 pop.mean <- mean(~ area, data = ames)
 samp_ci <- samp_ci %>%
   mutate(covers = pop.mean >= lower & pop.mean <= upper)
-gf_pointrange(mean + lower + upper ~ .index, data = samp_ci, color = ~covers)
+gf_pointrange(mean + lower + upper ~ .index, data = samp_ci, color = ~ covers)
 ```
 
 7. How many of your confidence intervals contained the true mean? Is this the number you expected to see?
