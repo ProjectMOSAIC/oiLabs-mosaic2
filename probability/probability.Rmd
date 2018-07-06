@@ -9,6 +9,19 @@ output:
 
 ## Hot Hands
 
+```{r opts, include=FALSE}
+library(mosaic)
+library(oilabs)
+library(ggformula)
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+```{r load-packages, message=FALSE, eval=FALSE}
+library(mosaic)
+library(oilabs)
+library(ggformula)
+```
+
 Basketball players who make several baskets in succession are described as 
 having a *hot hand*. Fans and players have long believed in the hot hand 
 phenomenon, which refutes the assumption that each shot is independent of the 
@@ -31,17 +44,9 @@ NBA finals earned him the title *Most Valuable Player* and many spectators
 commented on how he appeared to show a hot hand. Let's load some data from those
 games and look at the first several rows.
 
-```{r opts, eval=TRUE, echo=FALSE}
-library(knitr)
-opts_chunk$set(eval=FALSE)
-```
-
-```{r load-data, message=TRUE, eval=TRUE}
-library(mosaic)
-library(oilabs)
-library(openintro)
-data(kobe)
-head(kobe)
+```{r load-data, message=TRUE}
+data(kobe_basket)
+head(kobe_basket)
 ```
 
 In this data frame, every row records a shot taken by Kobe Bryant. If he hit the
@@ -67,15 +72,16 @@ occurrence).
 1.  What does a streak length of 1 mean, i.e. how many hits and misses are in a 
     streak of 1? What about a streak length of 0?
 
-The custom function `calc_streak`, which was loaded in with the `oilabs` package, may be 
+The custom function `calc_streak()`, which was loaded in with the `oilabs` package, may be 
 used to calculate the lengths of all shooting streaks and then look at the 
 distribution.
 
 ```{r calc-streak-kobe}
-kobe_streak <- kobe %>% 
-  pull(basket) %>% 
+kobe_streak <- kobe_basket %>% 
+  pull(shot) %>% 
   calc_streak()
-gf_bar(~ kobe_streak) 
+
+gf_bar(~ length, data = kobe_streak) 
 ```
 
 Note that instead of making a histogram, we chose to make a bar plot from a 
@@ -141,7 +147,7 @@ resample(outcomes, size = 1)
 ```
 
 The vector `outcomes` can be thought of as a hat with two slips of paper in it: 
-one slip says `heads` and the other says `tails`. The function `resample` draws 
+one slip says `heads` and the other says `tails`. The function `resample()` draws 
 one slip from the hat and tells us if it was a head or a tail. 
 
 Run the second command listed above several times. Just like when flipping a 
@@ -155,14 +161,14 @@ the slip of paper back in the hat before drawing again). Save the resulting
 vector of heads and tails in a new object called `sim_fair_coin`.
 
 ```{r sim-fair-coin}
-sim_fair_coin <- resample(outcomes, size = 100)
+flips <- 100
+sim_fair_coin <- do(flips) * resample(outcomes, size = 1)
 ```
 
-To view the results of this simulation, type the name of the object and then use
-`tally` to count up the number of heads and tails.
+To view the results of this simulation, use the `tally()` function to count 
+up the number of heads and tails.
 
 ```{r table-sim-fair-coin}
-sim_fair_coin
 tally(~ sim_fair_coin)
 ```
 
@@ -172,7 +178,8 @@ that we know only lands heads 20% of the time. We can adjust for this by adding
 an argument called `prob`, which provides a vector of two probability weights.
 
 ```{r sim-unfair-coin, eval=FALSE}
-sim_unfair_coin <- resample(outcomes, size = 100, prob = c(0.2, 0.8))
+sim_unfair_coin <- do(flips) * resample(outcomes, size = 1, prob = c(0.2, 0.8))
+tally(~ sim_unfair_coin)
 ```
 
 `prob=c(0.2, 0.8)` indicates that for the two elements in the `outcomes` vector,
@@ -190,7 +197,7 @@ Another way of thinking about this is to think of the outcome space as a bag of
 10 chips, where 2 chips are labeled "head" and 8 chips "tail". Therefore at each
 draw, the probability of drawing a chip that says "head"" is 20%, and "tail" is 80%.
 
-If you want to learn more about `resample` or any other function, recall that you 
+If you want to learn more about `resample()` or any other function, recall that you 
 can always check out its help file.
 
 ```{r help-resample,tidy = FALSE}
@@ -216,7 +223,7 @@ sim_basket <- resample(outcomes, size = 1)
 To make a valid comparison between Kobe and our simulated independent shooter, 
 we need to align both their shooting percentage and the number of attempted shots.
 
-4.  What change needs to be made to the `resample` function so that it reflects a 
+4.  What change needs to be made to the `resample()` function so that it reflects a 
     shooting percentage of 45%? Make this adjustment, then run a simulation to 
     sample 133 shots. Assign the output of this simulation to a new object called
     `sim_basket`.
@@ -231,7 +238,7 @@ necessary to compare Kobe to our independent shooter. We can look at Kobe's data
 alongside our simulated data.
 
 ```{r compare-basket}
-kobe %>% select(basket)
+kobe_basket %>% select(shot)
 sim_basket
 ```
 
@@ -246,7 +253,7 @@ a hot hand.
 
 ### Comparing Kobe Bryant to the Independent Shooter
 
-Using `calc_streak`, compute the streak lengths of `sim_basket`.
+Using `calc_streak()`, compute the streak lengths of `sim_basket`.
 
 -   Describe the distribution of streak lengths. What is the typical streak 
     length for this simulated independent shooter with a 45% shooting percentage?
