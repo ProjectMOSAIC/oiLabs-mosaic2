@@ -23,12 +23,14 @@ To get you started, enter all commands at the R prompt (i.e. right after `>` on 
 R has a number of additional packages that help you perform specific tasks. In order to use these packages, they must be installed (you only have to do this once) and loaded (you have to do this every time you start an R session). 
 
 ```{r opts, eval=TRUE, echo=FALSE}
-library(knitr)
+library(oilabs)
+library(mosaic)
+library(ggformula)
 opts_chunk$set(eval=TRUE)
 ```
 
 We then load the packages:
-```{r load-packages, message=FALSE}
+```{r load-packages, message=FALSE, eval=FALSE}
 library(oilabs)
 library(mosaic)
 library(ggformula)
@@ -242,7 +244,6 @@ These data come from a report by the Centers for Disease Control [http://www.cdc
 
 ## Appendix 
 *To use packages, you will need to first install them. To install packages, run the commands below. It may take a few minutes; you'll know when the packages have finished installing when you see the R prompt return in your console. 
-XX installing packages `cdc` data error still present 
 
 ```{r load-mosaic-devtools-oilabs, message=FALSE}
 install.packages(c("mosaic", "devtools"))

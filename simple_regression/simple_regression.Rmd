@@ -9,16 +9,16 @@ output:
 ---
 
 ```{r opts, include=FALSE}
-library(knitr)
 library(mosaic)
 library(oilabs)
+library(ggformula)
 knitr::opts_chunk$set(eval = TRUE)
 ```
 
 ```{r load-packages, message=FALSE, eval=FALSE}
-library(knitr)
 library(mosaic)
 library(oilabs)
+library(ggformula)
 ```
 
 ## Batter up 
@@ -61,10 +61,14 @@ work with the three newer variables on your own.
     to predict the number of runs?
 
 If the relationship looks linear, we can quantify the strength of the
-relationship with the correlation coefficient.
+relationship with the correlation coefficient. With the code below, we can
+use `gf_point()` to create a scatterplot to visualize a general relationship 
+between the number of runs and the number of at bats, while
+the `cor()` function calculates the correlation between these two variables. 
 
 ```{r cor, message=FALSE}
-XX PICK UP FROM HERE gf_point()
+gf_point(runs ~ at_bats, data = mlb11)
+
 cor(runs ~ at_bats, data = mlb11)
 ```
 
@@ -135,7 +139,7 @@ about the linear model that was just fit. We can access this information using
 the summary function.
 
 ```{r summary-m1}
-summary(m1)
+msummary(m1)
 ```
 
 Let's consider this output piece by piece. First, the formula used to describe 
@@ -169,9 +173,8 @@ gf_point(runs ~ at_bats, data = mlb11) %>%
    gf_lm() 
 ```
 
-Here we are literally adding a layer on top of our plot. `gf_lm()` creates
-the line by fitting a linear model. We can also use the `gf_smooth()` to show the standard error 
-associated with our line, but we won't use that for now.
+Here we are literally adding a layer on top of our plot. The `gf_lm()` function 
+creates the line by fitting a linear model. 
 
 This line can be used to predict $y$ at any value of $x$. When 
 predictions are made for values of $x$ that are beyond the range of the observed
@@ -195,11 +198,12 @@ of the residuals vs. at-bats.
 
 ```{r residuals}
 gf_point(.stdresid ~ .fitted, data = m1) %>%
-  gf_hline(yintercept = 0, linetype = "dashed")%>%
+  gf_hline(yintercept = 0, linetype = "dashed") %>%
   gf_labs(x = "Fitted Values", y = "Residuals") 
 ```
 
-Notice here that our model object `m1` can also serve as a data set because stored within it are the fitted values ($\hat{y}$) and the residuals.
+Notice here that our model object `m1` can also serve as a data set because stored within it are the fitted 
+values ($\hat{y}$) and the residuals.
 
 6.  Is there any apparent pattern in the residuals plot? What does this indicate
     about the linearity of the relationship between runs and at-bats?  

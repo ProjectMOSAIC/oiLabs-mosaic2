@@ -9,16 +9,16 @@ output:
 ---
 
 ```{r opts, include=FALSE}
-library(knitr)
 library(mosaic)
 library(oilabs)
+library(ggformula)
 knitr::opts_chunk$set(eval = TRUE)
 ```
 
 ```{r load-packages, message=FALSE, eval=FALSE}
-library(knitr)
 library(mosaic)
 library(oilabs)
+library(ggformula)
 ```
 
 In August of 2012, news outlets ranging from the [Washington

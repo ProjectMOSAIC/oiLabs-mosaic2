@@ -8,11 +8,17 @@ output:
   pdf_document: default
 ---
 
-```{r global_options, include=FALSE}
-knitr::opts_chunk$set(eval = TRUE)
-library(dplyr)
-library(ggplot2)
+```{r opts, include=FALSE}
 library(mosaic)
+library(oilabs)
+library(ggformula)
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+```{r load-packages, message=FALSE, eval=FALSE}
+library(mosaic)
+library(oilabs)
+library(ggformula)
 ```
 
 In this lab, we investigate the ways in which the statistics from a random 
@@ -22,26 +28,17 @@ to learn about the properties of the estimate, such as its distribution.
 
 ## The data
 
-We consider real estate data from the city of Ames, Iowa. The details of 
+We analyze real estate data from the city of Ames, Iowa. The details of 
 every real estate transaction in Ames is recorded by the City Assessor's 
 office. Our particular focus for this lab will be all residential home sales 
 in Ames between 2006 and 2010.  This collection represents our population of 
 interest. In this lab we would like to learn about these home sales by taking 
-smaller samples from the full population. Let's first load some packages that
-we will use in this lab:
-
-```{r load-packages, eval=TRUE}
-library(dplyr)
-library(ggplot2)
-library(mosaic)
-library(oilabs)
-```
-
-and then load the data from the `oilabs` package.
+smaller samples from the full population. Let's first load the data from 
+the `oilabs` package and use `glimpse()` to get a preview of the data.
 
 ```{r load-data}
 data(ames)
-head(ames)
+glimpse(ames)
 ```
 
 We see that there are quite a few variables in the data set, enough to do a 
@@ -57,8 +54,8 @@ a histogram:
 gf_dhistogram(~ area, data = ames, bins = 13)
 ```
 
-Let's also obtain some summary statistics. Note that we can do this using the
-`favstats` function. Finding these values are useful for describing the 
+Let's also generate some summary statistics. Note that we can do this using the
+`favstats()` function. Finding these values are useful for describing the 
 distribution, as we can use them for descriptions like *"the middle 50% of the 
 homes have areas between such and such square feet"*.
 
@@ -87,14 +84,14 @@ samp1 <- ames %>%
   sample_n(50)
 ```
 
-The `sample_n` function collects a simple random sample of size 50 from the `ames` dataset 
-`area`, which is assigned to `samp1`. This is like going into the City 
+The `sample_n` function collects a simple random sample of size 50 from the `ames` 
+dataset, which is assigned to `samp1`. This is like going into the City 
 Assessor's database and pulling up the files on 50 random home sales. Working 
-with these 50 files would be considerably simpler than working with all 2930 
+with these 50 observations would be considerably simpler than working with all 2930 
 home sales.
 
 1.  Describe the distribution of area in this sample. How does it compare to the 
-    distribution of the population? **Hint:** the `sample_n` function takes a random
+    distribution of the population? **Hint:** the `sample_n()` function takes a random
     sample of observations (i.e. rows) from the dataset, you can still refer to 
     the variables in the dataset with the same names. Code you used in the 
     previous exercise will also be helpful for visualizing and summarizing the sample,
@@ -127,8 +124,8 @@ of sample means, called the *sampling distribution*, can help us understand
 this variability. In this lab, because we have access to the population, we 
 can build up the sampling distribution for the sample mean by repeating the 
 above steps many times. Here we will generate 2000 samples and compute the 
-sample mean of each. Note that we since we are sampling with replacement, we 
-use the `resample` function instead of `sample_n`. 
+sample mean of each. Note that since we are sampling with replacement, we 
+use the `resample()` function instead of `sample_n()`. 
 
 ```{r loop}
 sample_means50 <- do(2000) * mean(~ area, data = resample(ames, 50))
@@ -144,19 +141,19 @@ the mean of each sample, and store each result in a vector called
     expect the distribution to change if we instead collected 10,000 sample 
     means?
 
-## Interlude: The `do` function
+## Interlude: The `do()` function
 
 Let's take a break from the statistics for a moment to let that last block 
-of code sink in. The idea behind the `do` function is *repetition*: it allows 
+of code sink in. The idea behind the `do()` function is *repetition*: it allows 
 you to execute a line of code as many times as you want and put the results 
-in a data frame.  In the case above, we wanted to repeatedly take a random 
+in a data frame. In the case above, we wanted to repeatedly take a random 
 sample of size 50 from `area` and then save the mean of that sample into 
 the `sample_means50` vector.
 
-Without the `do` function, this would be painful. First, we'd have to create 
+Without the `do()` function, this would be painful. First, we'd have to create 
 an empty vector filled with `NA`s to hold the 2000 sample means. Then, we'd have 
-to compute each of the 2000 sample means one line at a time, putting them 
-individually into the slots of the `sample_means50` vector:
+to use a `for` loop to compute each of the 2000 sample means one line at a time, 
+putting them individually into the slots of the `sample_means50` vector:
 
 ```{r do-long}
 sample_means50 <- rep(NA, 2000) #create empty vector
@@ -168,7 +165,7 @@ sample_means50[4] <- mean(~ area, data = resample(ames, 50))
 # ...and so on, 2000 times
 ```
 
-With the `do` function, these thousands of lines of code are compressed 
+With the `do` function, these lines of code are expressed 
 into one line:
 
 ```{r do-again}
@@ -176,21 +173,21 @@ sample_means50 <- do(2000) * mean(~ area, data = resample(ames, 50))
 ```
 
 Note that for each of the 2,000 times we computed a mean, we did so from a 
-**different** sample!
+**different** random sample!
 
-1.  To make sure you understand what the `resample` and `do` functions do, try
+1.  To make sure you understand what the `resample()` and `do()` functions do, try
     modifying the code to take only **25 sample means** from **samples of size 10**, 
-    and put them in a data frame named `sample_means_small`. Print the output. 
+    and save them in a data frame named `sample_means_small`. Print the output. 
     How many elements are there in this object called `sample_means_small`? What does 
     each element represent?
 
 ## Sample size and the sampling distribution
 
-Mechanics aside, let's return to the reason we used the `do` function: to compute a 
+Mechanics aside, let's return to the reason we used the `do()` function: to compute a 
 sampling distribution, specifically, this one.
 
-```{r hist, eval=FALSE}
-histogram(~ mean, data = sample_means50)
+```{r hist}
+gf_dhistogram(~ mean, data = sample_means50, binwidth = 42)
 ```
 
 The sampling distribution that we computed tells us much about estimating 
@@ -199,8 +196,8 @@ unbiased estimator, the sampling distribution is centered at the true average
 living area of the the population, and the spread of the distribution 
 indicates how much variability is induced by sampling only 50 home sales.
 
-In the remainder of this section we will work on getting a sense of the effect that 
-sample size has on our sampling distribution
+In the remainder of this section, we will work on getting a sense of the effect that 
+sample size has on our sampling distribution.
 
 **Step 1:** Create three sampling distributions, each containing 2,000 sample means,
 with sample means coming from samples of size $n = 10$, $n = 50$, and $n = 100$.
@@ -215,27 +212,30 @@ sample_means100 <- do(2000) * mean(~ area, data = resample(ames, 100))
 same scale so that we can easily compare their shapes, centers, and spreads to
 each other.
 
--- **Step 2a:** Combine these three sampling distributions (three $2000 \times 1$ data 
-frames) into one $6000 \times 1$ data frame. Note that we're just doing this 
-for ease in plotting later. To combine data frames by row, we use the `bind_rows` function.
-
-```{r samp-dist}
-sampling_dist <- bind_rows(sample_means10, sample_means50, sample_means100)
-```
-
--- **Step 2b:** Add a new column called `sample_size` to the data frame you just
+-- **Step 2a:** Add a new column called `sample_size` to the data frame you just
 created that indicates the sample size that each case (each sample mean) came
 from. Remember the first 2,000 sample means came from samples of size 10, the next
 2,000 sample means came from samples of size 50, and the last 2,000 sample means
 came from samples of size 100. Hence, this new variable is simply $10$ `rep`eated 
 2,000 times, followed by $50$ repeated 2000 times, followed by $100$ repeated 2,000 
 times. The use of the `factor` function will ensure that `R` considers this to be a 
-categorical variable, and not a numerical one. Also remember that we use the `mutate`
+categorical variable, and not a numerical one. Also remember that we use the `mutate()`
 function to create new variables in data frames.
 
+```{r samp-dist}
+sample_means10 <- sample_means10 %>% mutate(sample_size = factor(rep(10, 2000)))
+sample_means50 <- sample_means50 %>% mutate(sample_size = factor(rep(50, 2000)))
+sample_means100 <- sample_means100 %>% mutate(sample_size = factor(rep(100, 2000)))
+```
+
+-- **Step 2b:** Combine these three sampling distributions (three $2000 \times 1$ data 
+frames) into one $6000 \times 1$ data frame. Note that we're just doing this 
+for ease in plotting later. To combine data frames by row, we use the `bind_rows()` function.
+
 ```{r samp-dist-labeled}
-sampling_dist <- sampling_dist %>%
-  mutate(sample_size = factor(c(rep(10, 2000), rep(50, 2000), rep(100, 2000))))
+sampling_dist <- bind_rows(sample_means10, sample_means50, sample_means100)
+
+## XX NH followed your comments but the error message returns "Unequal factor levels"
 ```
 
 -- **Step 2c:** Finally, draw three histograms or densityplots representing these three sampling 
@@ -245,7 +245,7 @@ separate facet in the plot for each of the three histograms. Remember that
 in either case, we identify the distributions with the `sample_size` variable we
 created earlier.
 
-```{r eval=FALSE}
+```{r}
 gf_dens(~ mean, data = sampling_dist, color = ~ sample_size)
 gf_dhistogram(~ mean | sample_size, data = sampling_dist, bins = 15)
 ```
