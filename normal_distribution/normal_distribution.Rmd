@@ -7,11 +7,17 @@ output:
     css: ../lab.css
 ---
 
-```{r include = FALSE, eval = TRUE}
-knitr::opts_chunk$set(eval = FALSE)
+```{r opts, include=FALSE}
 library(mosaic)
 library(oilabs)
-library(tidyr)
+library(ggformula)
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+```{r load-packages, message=FALSE, eval=FALSE}
+library(mosaic)
+library(oilabs)
+library(ggformula)
 ```
 
 In this lab we'll investigate the probability distribution that is most central
@@ -24,18 +30,16 @@ learn how to generate random numbers from a normal distribution.
 
 This week we'll be working with measurements of body dimensions.  This data set 
 contains measurements from 247 men and 260 women, most of whom were considered 
-healthy young adults. Let's take a quick peek at the first few rows of the data.
+healthy young adults. Let's take a quick peek at the first few rows of the data:
 
-```{r load-data, message=FALSE, warning=FALSE, results='hide', eval=TRUE}
-library(mosaic)
-library(oilabs)
-data(bdims, package = "oilabs")
+```{r load-data, message=FALSE, warning=FALSE, results='hide'}
+data(bdims)
 head(bdims)
 ```
 
 You'll see that for every observation we have 25 measurements, many of which are
 either diameters or girths.  You can learn about what the variable names mean by
-bringing up the help page.
+bringing up the help page:
 
 ```{r help-bdims}
 ?bdims
@@ -183,19 +187,15 @@ exercise.)
 If we assume that female heights are normally distributed (a very close 
 approximation is also okay), we can find this probability by calculating a Z 
 score and consulting a Z table (also called a normal probability table).  In R, 
-this is done in one step with the function `pnorm()`.
+this is done in one step with the function `xpnorm()`.
 
 ```{r pnorm}
-1 - pnorm(q = 182, mean = meanFheight, sd = sdFheight)
-```
-
-
-Note that the function `pnorm` gives the area under the normal curve below a 
-given value, `q`, with a given mean and standard deviation.  
-
-```{r, echo=FALSE, fig.width=10, eval=FALSE, message=FALSE, results='hide'}
 1 - xpnorm(q = 182, mean = meanFheight, sd = sdFheight)
 ```
+
+
+Note that the function `xpnorm()` gives the area under the normal curve below a 
+given value, `q`, with a given mean and standard deviation.  
 
 Since we're interested in the probability that someone is taller than 182 cm, we have to 
 take one minus that probability.
