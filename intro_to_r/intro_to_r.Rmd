@@ -25,15 +25,13 @@ R has a number of additional packages that help you perform specific tasks. In o
 ```{r opts, eval=TRUE, echo=FALSE}
 library(oilabs)
 library(mosaic)
-library(ggformula)
-opts_chunk$set(eval=TRUE)
+knitr::opts_chunk$set(eval=TRUE)
 ```
 
 We then load the packages:
 ```{r load-packages, message=FALSE, eval=FALSE}
 library(oilabs)
 library(mosaic)
-library(ggformula)
 ```
 
 If you see the error message "package not found", refer to the Appendix for troubleshooting*.
