@@ -45,7 +45,6 @@ references:
 ```{r opts, eval=TRUE, echo=FALSE}
 library(oilabs)
 library(mosaic)
-library(ggformula)
 knitr::opts_chunk$set(eval=TRUE)
 ```
 
@@ -53,7 +52,6 @@ knitr::opts_chunk$set(eval=TRUE)
 ```{r load-packages, message=FALSE, eval=FALSE}
 library(oilabs)
 library(mosaic)
-library(ggformula)
 ```
 
 
@@ -71,8 +69,6 @@ instructional ratings.
 
 In this lab we will analyze the data from this study in order to learn what goes 
 into a positive professor evaluation.
-
-
 
 ## The data
 
@@ -162,27 +158,8 @@ gf_jitter(score ~ bty_avg, data = evals, xlab = "Avg Beauty Rating")
     predictor? Does it appear to be a practically significant predictor?
     
 6.  Use residual plots to evaluate whether the conditions of least squares
-    regression are reasonable. Provide plots and comments for each one. 
-    We have included code from the Open Intro Simple Regression Lab to serve as 
-    a template for your work (hint: change the variable `m1` and data names before running)
-    
-```{r residuals, eval = FALSE}
-gf_point(.stdresid ~ .fitted, data = m1) %>%
-  gf_hline(yintercept = 0, linetype = "dashed") %>%
-  gf_labs(x = "Fitted Values", y = "Residuals")
-
-gf_point(residuals ~ fitted.values, data = m1) %>%
-  gf_hline(yintercept = 0, linetype = "dashed") 
-
-gf_dhistogram(~ .stdresid, data = m1, bins = 6) %>% 
-  gf_fitdistr(dist = dnorm)
-
-gf_qq(~ .stdresid, data = m1) %>% 
-  gf_qqline()
-```
-
-Either the histogram with the Normal distribution overlay or the QQ-plot 
-can be used to assess the conditions of least squares regression. 
+    regression are reasonable. Either the histogram with the Normal distribution 
+    overlay or the QQ-plot can be used. Provide plots and comments for each one. 
 
 ## Multiple linear regression
 
@@ -209,9 +186,16 @@ evals %>%
   GGally::ggscatmat()
 ```
 
-These variables are collinear (correlated), and adding more than one of these 
-variables to the model would not add much value to the model. In this 
-application and with these highly-correlated predictors, it is reasonable to use
+This code first selects the rows of which the variable name starts with the letters "bty", 
+and then feeds them into the `ggscatmat()` function from the `GGally` package. This function
+makes a scatterplot matrix for quantitative variables with density plots on the diagonal and 
+correlation printed in the upper triangle..
+
+XX NH Can you help me understand how to interpret the density plots on the diagonal? 
+
+As one can see from the scatterplots, these variables are collinear (correlated), and 
+adding more than one of these variables to the model would not add much value to the model. 
+In this application and with these highly-correlated predictors, it is reasonable to use
 the average beauty score as the single representative of these variables.
 
 In order to see if beauty is still a significant predictor of professor score 
@@ -222,6 +206,8 @@ term into the model.
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 msummary(m_bty_gen)
 ```
+The `msummary()` function gives a more streamlined version of the output
+of the `summary()` function.
 
 7.  P-values and parameter estimates should only be trusted if the
     conditions for the regression are reasonable. Verify that the conditions
