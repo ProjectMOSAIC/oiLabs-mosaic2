@@ -374,7 +374,7 @@ gf_histogram(~ origin, fill = ~ dep_type, data = nycflights, stat = "count") %>%
 dl_aa_ua <- nycflights %>%
   filter(carrier == "AA" | carrier == "DL" | carrier == "UA")
 
-gf_histogram(arr_delay ~ dep_delay, color = ~ carrier, data = dl_aa_ua)
+gf_point(arr_delay ~ dep_delay, color = ~ carrier, data = dl_aa_ua)
 ```
 
 <div id="license">
