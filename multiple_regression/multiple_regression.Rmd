@@ -1,5 +1,6 @@
 ---
 title: "Multiple linear regression"
+date: "Last updated on July 12, 2018"
 output:
   html_document:
     css: ../lab.css
@@ -42,7 +43,7 @@ references:
   ISBN: 9780521686891
 ---
 
-```{r opts, eval=TRUE, echo=FALSE}
+```{r opts, eval=TRUE, echo=FALSE, message=FALSE}
 library(oilabs)
 library(mosaic)
 knitr::opts_chunk$set(eval=TRUE)
@@ -169,9 +170,11 @@ physical appearance of the professors and the average of these six scores. Let's
 take a look at the relationship between one of these scores and the average 
 beauty score.
 
-```{r bty-rel}
+```{r bty-rel, message=FALSE}
 gf_point(bty_avg ~ bty_f1lower, data = evals, 
-         xlab = "Beauty Rating of Professor from First or Second Year Female", ylab = "Avg Beauty Rating")
+         xlab = "Beauty Rating of Professor from First or Second Year Female", 
+         ylab = "Avg Beauty Rating") %>% 
+  gf_smooth()
 cor(bty_avg ~ bty_f1lower, data = evals)
 ```
 
@@ -180,7 +183,7 @@ calculated using the individual scores. We can actually take a look at the
 relationships between all beauty variables (columns 13 through 19) using the 
 following command:
 
-```{r bty-rels}
+```{r bty-rels, message=FALSE}
 evals %>%
   select(starts_with('bty')) %>%
   GGally::ggscatmat()
@@ -189,13 +192,11 @@ evals %>%
 This code first selects the rows of which the variable name starts with the letters "bty", 
 and then feeds them into the `ggscatmat()` function from the `GGally` package. This function
 makes a scatterplot matrix for quantitative variables with density plots on the diagonal and 
-correlation printed in the upper triangle..
-
-XX NH Can you help me understand how to interpret the density plots on the diagonal? 
-
-As one can see from the scatterplots, these variables are collinear (correlated), and 
-adding more than one of these variables to the model would not add much value to the model. 
-In this application and with these highly-correlated predictors, it is reasonable to use
+correlation printed in the upper triangle. The correlation values shown on the upper right triangle 
+correspond with the scatterplots on the lower left triangle. Moreover, the density plots on the 
+diagonal seem relatively symmetric, so we can conclude that the variables are collinear (correlated).
+Adding more than one of these variables to the model would not add much value to the model. 
+In this application and with these highly-correlated predictors, it may be reasonable to use
 the average beauty score as the single representative of these variables.
 
 In order to see if beauty is still a significant predictor of professor score 
@@ -207,7 +208,15 @@ m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 msummary(m_bty_gen)
 ```
 The `msummary()` function gives a more streamlined version of the output
-of the `summary()` function.
+of the `summary()` function. 
+
+To help you interpret the output of this function, consider this: 
+We can use the values on the `Estimate` as coefficients for the multiple 
+regression model, which is Predicted Score = 3.747 + 0.074 * Average Beauty Rating of
+Professsor + 0.172 * Gender. As an example, this model would predict the score of a female 
+professor, who received an average beauty rating of "8", to be  3.747 + (0.074 * 8) + 
+(0.172 * 0), or  4.34, whereas a male professor, who received the same average beauty
+rating, could expect a score of  3.747 + (0.074 * 8) + (0.172 * 1), or 4.51.  
 
 7.  P-values and parameter estimates should only be trusted if the
     conditions for the regression are reasonable. Verify that the conditions
@@ -216,11 +225,11 @@ of the `summary()` function.
 8.  Is `bty_avg` still a significant predictor of `score` in this model? Has the addition
     of `gender` to the model changed the parameter estimate for `bty_avg`?
 
-Note that the estimate for `gender` is now called `gendermale`. You'll see this 
+Note that the estimate for `gender` is called `gendermale`. You'll see this 
 name change whenever you introduce a categorical variable. The reason is that R 
 recodes `gender` from having the values of `female` and `male` to being an 
 indicator variable called `gendermale` that takes a value of $0$ for females and
-a value of $1$ for males. (Such variables are often referred to as "dummy" 
+a value of $1$ for males. (Such variables are often referred to as indicator (or "dummy") 
 variables.)
 
 The decision to call the indicator variable `gendermale` instead of`genderfemale`
@@ -244,14 +253,17 @@ following code.
 ```{r twoLines}
 m_bty_gen <- lm(score ~ bty_avg + gender, data = evals)
 lin_predict <- makeFun(m_bty_gen)
-
+evals <- evals %>%
+  mutate(gender = forcats::fct_relevel(gender, "male"))
 evals %>%
-  mutate(gender = forcats::fct_relevel(gender, "male")) %>%
   gf_point(score ~ bty_avg, data = ., color = ~ gender, 
            xlab = "Avg Beauty Score", ylab = "Avg Professor Evaluation Score") %>% 
     gf_line(lin_predict(bty_avg, gender = "female") ~ bty_avg, color = ~ "female") %>%
     gf_line(lin_predict(bty_avg, gender = "male") ~ bty_avg, color = ~ "male") 
 ```
+
+XX BL Pick up from here
+
 
 The `makeFun()` function takes the name of the linear regression model as its argument to create 
 the `lin_predict()` function that we now have, which takes in the model's explanatory variables to 

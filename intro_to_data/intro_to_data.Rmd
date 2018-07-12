@@ -1,5 +1,6 @@
 ---
 title: "Introduction to data"
+date: "Last updated on July 12, 2018"
 output:
   html_document:
     theme: cerulean
